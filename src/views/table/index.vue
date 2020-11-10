@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <el-button class="add-btn" type="primary" plain>添加按钮</el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -70,10 +71,19 @@ export default {
     fetchData() {
       this.listLoading = true
       getList().then(response => {
-        this.list = response.data.items
+        this.list = response.data_list
         this.listLoading = false
       })
     }
   }
 }
 </script>
+<style lang="scss">
+
+.app-container {
+ .add-btn {
+   margin-bottom:20px;
+  }
+}
+
+</style>

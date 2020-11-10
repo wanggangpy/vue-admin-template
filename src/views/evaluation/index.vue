@@ -12,7 +12,7 @@
         <div class="text item">
           <el-tabs tab-position="left" style="height: 200px;">
             <el-tab-pane :label="section.title" v-for="(section, sindex) in content.section_list" :key="sindex">
-              <el-button icon="el-icon-plus" circle @click="itemVisible = true"></el-button>
+              <el-button icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex"></el-button>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -55,15 +55,30 @@
     <el-dialog width="25%" title="添加分项内容" :visible.sync="itemVisible">
       <el-form :model="sectionForm" :rules="sectionRules" ref="sectionForm">
         <el-form-item label="分项内容标题" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="sectionForm.title"></el-input>
+          <el-input v-model="itemForm.title"></el-input>
         </el-form-item>
         <el-form-item label="分项内容" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="sectionForm.title"></el-input>
+          <el-input v-model="itemForm.content"></el-input>
         </el-form-item>
         <el-form-item label="分项分数" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="sectionForm.score"></el-input>
+          <el-input v-model="itemForm.item_score"></el-input>
+        </el-form-item>
+        <el-form-item :label="`选项`+cindex" :label-width="formLabelWidth" v-for="(choose, cindex) in itemForm.chooses" :key="cindex">
+          <el-col :span="12">
+            <el-input v-model="choose.title"></el-input>
+          </el-col>
+          <el-col class="line" :span="3" style="text-align:center">分数</el-col>
+          <el-col :span="5">
+            <el-input v-model="choose.choose_score"></el-input>
+          </el-col>
+           <el-col class="line" :span="4" style="text-align:center">
+             <span @click.prevent="delIChoose(cindex)">
+               删除
+             </span>
+           </el-col>
         </el-form-item>
       </el-form>
+      <el-button type="primary" style="margin-left:110px" size="mini" @click="addChoose">添加选项</el-button>
       <div slot="footer" class="dialog-footer">
         <el-button @click="itemVisible = false">取 消</el-button>
         <el-button type="primary" @click="addSection('sectionForm')">确 定</el-button>
@@ -82,7 +97,7 @@ export default {
       EvaluationForm: {
         title: '',
         contentList: [
-          { 'title': '1级标题', 'weights': 0.1, 'section_list': [{ 'title': '2级标题', 'score': 50 }] }
+          { 'title': '1级标题', 'weights': 0.1, 'section_list': [{ 'title': '2级标题', 'score': 50, 'item_list': [] }] }
         ]
       },
       contentVisible: false,
@@ -159,6 +174,16 @@ export default {
           return false
         }
       })
+    },
+    addChoose() {
+      this.itemForm.chooses.push({
+        title: '',
+        item_score: ''
+      })
+    },
+    delIChoose(item) {
+      var index = this.itemForm.chooses.indexOf(item)
+      this.itemForm.chooses.splice(index, 1)
     },
     onCancel() {
       this.$message({

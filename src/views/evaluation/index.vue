@@ -10,9 +10,13 @@
           <el-button style="float: right; padding: 3px 0" type="text" @click="sectionVisible = true, contentIndex=cindex">添加</el-button>
         </div>
         <div class="text item">
-          <el-tabs tab-position="left" style="height: 200px;">
+          <el-tabs tab-position="left" style="min-height: 200px;">
             <el-tab-pane :label="section.title" v-for="(section, sindex) in content.section_list" :key="sindex">
-              <el-button icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex"></el-button>
+              <div class="item-box" v-for="(item, iindex) in section.item_list" :key="iindex">
+                <p>({{ item.title }})，{{item.content}}</p>
+                <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}</p>
+              </div>
+              <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex"></el-button>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -20,7 +24,7 @@
     </el-row>
 
     <el-row>
-      <el-button type="primary" @click="sectionVisible = true">添加</el-button>
+      <el-button type="primary" @click="contentVisible = true">添加</el-button>
     </el-row>
     <el-dialog width="25%" title="添加评估内容" :visible.sync="contentVisible">
       <el-form :model="contentForm" :rules="contentRules" ref="contentForm">
@@ -53,7 +57,7 @@
     </el-dialog>
 
     <el-dialog width="25%" title="添加分项内容" :visible.sync="itemVisible">
-      <el-form :model="sectionForm" :rules="sectionRules" ref="sectionForm">
+      <el-form :model="itemForm" :rules="itemRules" ref="itemForm">
         <el-form-item label="分项内容标题" :label-width="formLabelWidth" prop="title">
           <el-input v-model="itemForm.title"></el-input>
         </el-form-item>
@@ -61,7 +65,7 @@
           <el-input v-model="itemForm.content"></el-input>
         </el-form-item>
         <el-form-item label="分项分数" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="itemForm.item_score"></el-input>
+          <el-input v-model="itemForm.score"></el-input>
         </el-form-item>
         <el-form-item :label="`选项`+cindex" :label-width="formLabelWidth" v-for="(choose, cindex) in itemForm.chooses" :key="cindex">
           <el-col :span="12">
@@ -81,7 +85,7 @@
       <el-button type="primary" style="margin-left:110px" size="mini" @click="addChoose">添加选项</el-button>
       <div slot="footer" class="dialog-footer">
         <el-button @click="itemVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSection('sectionForm')">确 定</el-button>
+        <el-button type="primary" @click="addItem('itemForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -96,14 +100,13 @@ export default {
       formLabelWidth: '110px',
       EvaluationForm: {
         title: '',
-        contentList: [
-          { 'title': '1级标题', 'weights': 0.1, 'section_list': [{ 'title': '2级标题', 'score': 50, 'item_list': [] }] }
-        ]
+        contentList: []
       },
       contentVisible: false,
       contentForm: {
         title: '',
-        weights: ''
+        weights: '',
+        section_list:[]
       },
       contentRules: {
         title: [
@@ -116,7 +119,8 @@ export default {
       sectionVisible: false,
       sectionForm: {
         title: '',
-        score: ''
+        score: '',
+        item_list: []
       },
       sectionRules: {
         title: [
@@ -130,7 +134,7 @@ export default {
       itemForm: {
         title: '',
         content: '',
-        item_score: '',
+        score: '',
         chooses: []
       },
       itemRules: {
@@ -140,7 +144,7 @@ export default {
         content: [
           { required: true, message: '请输入分数', trigger: 'blur' }
         ],
-        item_score: [
+        score: [
           { required: true, message: '请输入分数', trigger: 'blur' }
         ]
       }
@@ -154,7 +158,8 @@ export default {
           this.contentVisible = false
           this.contentForm = {
             title: '',
-            weights: ''
+            weights: '',
+            section_list: []
           }
         } else {
           return false
@@ -168,7 +173,25 @@ export default {
           this.sectionVisible = false
           this.sectionForm = {
             title: '',
-            score: ''
+            score: '',
+            item_list: []
+          }
+          console.log(this.EvaluationForm)
+        } else {
+          return false
+        }
+      })
+    },
+    addItem(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.EvaluationForm.contentList[this.contentIndex].section_list[this.sectionIndex].item_list.push(this.itemForm)
+          this.itemVisible = false
+          this.itemForm = {
+            title: '',
+            content: '',
+            score: '',
+            chooses: []
           }
         } else {
           return false
@@ -178,7 +201,7 @@ export default {
     addChoose() {
       this.itemForm.chooses.push({
         title: '',
-        item_score: ''
+        choose_score: ''
       })
     },
     delIChoose(item) {
@@ -199,6 +222,14 @@ export default {
 .add-evaluation {
     .el-row {
         padding: 10px 30px;
+    }
+
+    .item-box {
+      padding-bottom: 10px;
+      border-bottom: 1px #e6dede dashed;
+    }
+    .add-item-btn {
+      margin-top: 10px;
     }
 }
 

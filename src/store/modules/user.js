@@ -30,39 +30,39 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    commit('SET_TOKEN', '11111111')
-    setToken('11111111')
-    // const { username, password } = userInfo
-    // return new Promise((resolve, reject) => {
-    //   login({ username: username.trim(), password: password }).then(response => {
-    //     commit('SET_TOKEN', response.token)
-    //     setToken(response.token)
-    //     resolve()
-    //   }).catch(error => {
-    //     reject(error)
-    //     console.log(error)
-    //   })
-    // })
+    // commit('SET_TOKEN', '11111111')
+    // setToken('11111111')
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      login({ username: username.trim(), password: password }).then(response => {
+        commit('SET_TOKEN', response.token)
+        setToken(response.token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+        console.log(error)
+      })
+    })
   },
 
   // get user info
   getInfo({ commit, state }) {
-    commit('SET_NAME', 'admin')
-    // return new Promise((resolve, reject) => {
-    //   getInfo(state.token).then(response => {
-    //     const { data } = response
-    //     console.log(data, 'data')
-    //     if (!data) {
-    //       return reject('Verification failed, please Login again.')
-    //     }
+    // commit('SET_NAME', 'admin')
+    return new Promise((resolve, reject) => {
+      getInfo(state.token).then(response => {
+        const { data } = response
+        console.log(data, 'data')
+        if (!data) {
+          return reject('Verification failed, please Login again.')
+        }
 
-    //     const { username } = data
-    //     commit('SET_NAME', username)
-    //     resolve(data)
-    //   }).catch(error => {
-    //     reject(error)
-    //   })
-    // })
+        const { username } = data
+        commit('SET_NAME', username)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
   },
 
   // user logout

@@ -13,8 +13,8 @@
           <el-tabs tab-position="left" style="min-height: 200px;">
             <el-tab-pane :label="section.title" v-for="(section, sindex) in content.section_list" :key="sindex">
               <div class="item-box" v-for="(item, iindex) in section.item_list" :key="iindex">
-                <p>({{ item.title }})，{{item.content}}</p>
-                <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}</p>
+                <p>{{ iindex + 1 }}，({{ item.title }})，{{item.content}}</p>
+                <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
               </div>
               <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex"></el-button>
             </el-tab-pane>
@@ -106,7 +106,7 @@ export default {
       contentForm: {
         title: '',
         weights: '',
-        section_list:[]
+        section_list: []
       },
       contentRules: {
         title: [
@@ -182,7 +182,7 @@ export default {
         }
       })
     },
-    addItem(formName){
+    addItem(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.EvaluationForm.contentList[this.contentIndex].section_list[this.sectionIndex].item_list.push(this.itemForm)
@@ -203,6 +203,7 @@ export default {
         title: '',
         choose_score: ''
       })
+      console.log(this.EvaluationForm)
     },
     delIChoose(item) {
       var index = this.itemForm.chooses.indexOf(item)

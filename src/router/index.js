@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '我的问卷', icon: 'dashboard' }
     }]
   },
 
@@ -63,7 +63,7 @@ export const constantRoutes = [
         path: 'list',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '问卷管理', icon: 'table' }
       }
     ]
   },
@@ -100,7 +100,7 @@ export const constantRoutes = [
         path: 'add',
         name: 'Evaluation',
         component: () => import('@/views/users/index'),
-        meta: { title: 'users', icon: 'table' }
+        meta: { title: '用户管理', icon: 'table' }
       }
     ]
   },

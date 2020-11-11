@@ -19,7 +19,7 @@
             {{ scope.row.id }}
           </template>
         </el-table-column>
-        <el-table-column label="Title">
+        <el-table-column label="标题">
           <template slot-scope="scope">
             {{ scope.row.title }}
           </template>
@@ -54,6 +54,7 @@
         <el-table-column align="center" prop="created_at" label="操作" width="200">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.status" type="success" icon="el-icon-video-play" size="mini" @click="changeStatus(scope.$index, scope.row.status)">开始</el-button>
+            <el-button v-if="!scope.row.status" type="info" icon="el-icon-edit" size="mini" @click="$router.push('/evaluation/add')">编辑</el-button>
             <el-button v-if="scope.row.status" type="warning" icon="el-icon-video-pause" size="mini" @click="changeStatus(scope.$index, scope.row.status)">停止</el-button>
           </template>
         </el-table-column>
@@ -79,21 +80,14 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true,
+      listLoading: false,
       dataList: [
-        { id: 1, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 20, start_time: '2020-11-11', end_time: '2020-11-20', status: 1 },
-        { id: 2, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 80, start_time: '2020-11-11', end_time: '2020-11-20', status: 0 },
-        { id: 3, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 0, start_time: '2020-11-11', end_time: '2020-11-20', status: 0 },
-        { id: 4, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 10, start_time: '2020-11-11', end_time: '2020-11-20', status: 0 },
-        { id: 5, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 90, start_time: '2020-11-11', end_time: '2020-11-20', status: 1 },
-        { id: 6, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 100, start_time: '2020-11-11', end_time: '2020-11-20', status: 0 },
-        { id: 7, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 33, start_time: '2020-11-11', end_time: '2020-11-20', status: 1 },
-        { id: 8, title: '这是一个title这是一个title这是一个title', person_num: 50, already: 70, start_time: '2020-11-11', end_time: '2020-11-20', status: 0 }
+        { id: 1, title: '松材线虫病防控绩效评估综合评价表', person_num: 50, already: 20, start_time: '2020-11-11', end_time: '2020-11-20', status: 0 }
       ]
     }
   },
   created() {
-    this.fetchData()
+    // this.fetchData()
   },
   methods: {
     fetchData() {

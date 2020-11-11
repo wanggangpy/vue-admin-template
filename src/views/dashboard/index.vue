@@ -51,14 +51,14 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true,
+      listLoading: false,
       dataList: [
         { id: 1, title: '这是一个title这是一个title这是一个title', start_time: '2020-11-11', end_time: '2020-11-20' },
       ]
     }
   },
   created() {
-    this.fetchData()
+    // this.fetchData()
   },
   methods: {
     fetchData() {

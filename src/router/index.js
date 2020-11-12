@@ -93,19 +93,6 @@ export const constantRoutes = [
   },
 
   {
-    path: '/users',
-    component: Layout,
-    children: [
-      {
-        path: 'add',
-        name: 'Evaluation',
-        component: () => import('@/views/users/index'),
-        meta: { title: '用户管理', icon: 'table' }
-      }
-    ]
-  },
-
-    {
     path: '/result',
     component: Layout,
     children: [

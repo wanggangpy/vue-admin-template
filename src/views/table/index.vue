@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span class="card-title">问卷列表</span>
+        <span class="card-title">问卷管理</span>
         <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push('/evaluation/add')">添加</el-button>
       </div>
       <el-table

@@ -1,7 +1,19 @@
 <template>
   <div class="add-evaluation">
     <el-row>
-      <el-input v-model="EvaluationForm.title" />
+      <el-input v-model="EvaluationForm.title" placeholder="问卷标题" />
+    </el-row>
+    <el-row>
+      <div class="block">
+        <span class="demonstration">问卷调研时间：</span>
+        <el-date-picker
+          v-model="value1"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
+        </el-date-picker>
+      </div>
     </el-row>
     <el-row v-for="(content,cindex) in EvaluationForm.contentList" :key="cindex">
       <el-card class="box-card">
@@ -13,7 +25,7 @@
           <el-tabs tab-position="left" style="min-height: 200px;">
             <el-tab-pane :label="section.title" v-for="(section, sindex) in content.section_list" :key="sindex">
               <div class="item-box" v-for="(item, iindex) in section.item_list" :key="iindex">
-                <p>{{ iindex + 1 }}，({{ item.title }})，{{item.content}}</p>
+                <p>{{ iindex + 1 }}，({{ item.title }})，{{ item.content }}</p>
                 <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
               </div>
               <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex"></el-button>
@@ -24,7 +36,9 @@
     </el-row>
 
     <el-row>
-      <el-button type="primary" @click="contentVisible = true">添加</el-button>
+      <el-button type="primary" @click="contentVisible = true">添加评估内容</el-button>
+      <el-button type="primary" @click="$message.success('保存成功！')">保存问卷</el-button>
+      <el-button type="success" @click="$router.push({path: '/evaluationManage/list'})">返回</el-button>
     </el-row>
     <el-dialog width="25%" title="添加评估内容" :visible.sync="contentVisible">
       <el-form :model="contentForm" :rules="contentRules" ref="contentForm">
@@ -95,6 +109,7 @@
 export default {
   data() {
     return {
+      value1: [new Date(2020, 11, 12, 10, 10), new Date(2020, 11, 14, 10, 10)],
       contentIndex: '',
       sectionIndex: '',
       formLabelWidth: '110px',
@@ -180,7 +195,6 @@ export default {
             score: '',
             item_list: []
           }
-          console.log(this.EvaluationForm)
         } else {
           return false
         }

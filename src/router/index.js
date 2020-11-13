@@ -63,7 +63,7 @@ export const constantRoutes = [
         path: 'list',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: '问卷管理', icon: 'table' }
+        meta: { title: '问卷管理', icon: 'el-icon-s-order' }
       }
     ]
   },
@@ -86,14 +86,26 @@ export const constantRoutes = [
     children: [
       {
         path: 'fill',
-        name: 'Question',
         component: () => import('@/views/question/index')
       },
       {
         path: 'result',
-        name: 'Result',
+        hidden: true,
         component: () => import('@/views/result/index'),
         // meta: { title: '结果查询', icon: 'el-icon-s-order' }
+      }
+    ]
+  },
+
+  {
+    path: '/users',
+    component: Layout,
+    children: [
+      {
+        path: 'add',
+        name: 'Evaluation',
+        component: () => import('@/views/users/index'),
+        meta: { title: '用户管理', icon: 'el-icon-user-solid' }
       }
     ]
   },

@@ -3,7 +3,7 @@
     <el-card class="question-card">
       <h1 class="question-title">{{ evaluationData.title }}</h1>
       <el-row :gutter="20">
-        <el-col :span="10" :offset="7">
+        <el-col :lg="{span: 10, offset:7}" :xs="{span:22, offset:1}">
           <div class="content-box" v-for="(content, cindex) in evaluationData.contentList" :key="cindex" :style="{'border-bottom': (cindex === evaluationData.contentList.length ? '0px': '1px dashed red;')}">
             <h3 style="font-size:25px">{{ cnIndex[cindex+1] }}，{{ content.title }}</h3>
             <div class="section-box" v-for="(section, sindex) in content.section_list" :key="sindex">

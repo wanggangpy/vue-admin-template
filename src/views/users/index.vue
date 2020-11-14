@@ -46,17 +46,17 @@ export default {
       tableData: [],
       uploadDialogVisible: false,
       dialogWidth: '30%',
-      uploadApi: 'http://127.0.0.1:5000/upload',
+      uploadApi: process.env.VUE_APP_BASE_API + '/upload',
       uploadFileType: '.xls,.xlsx',
       importUserDemoUrl: process.env.VUE_APP_BASE_API + '/download?file=模板.xlsx'
     }
   },
   created() {
-    this.getData()
+    this.fetchData()
   },
   methods: {
-    getData() {
-      api.getData().then(response => {
+    fetchData() {
+      api.getUserData().then(response => {
           this.tableData = response.data
         })
     },
@@ -77,7 +77,7 @@ export default {
 
     handleAvatarSuccess(res, file) {
       api.importUser({'file': res}).then(response => {
-        this.storages = response.data
+        this.tableData = response.data
         this.$message.success('导入用户成功');
       })
       this.uploadDialogVisible = false

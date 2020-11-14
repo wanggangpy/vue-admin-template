@@ -56,26 +56,20 @@ export const constantRoutes = [
   },
 
   {
-    path: '/evaluationManage',
+    path: '/questionManage',
     component: Layout,
     children: [
       {
         path: 'list',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
+        name: 'questionManage',
+        component: () => import('@/views/question/index'),
         meta: { title: '问卷管理', icon: 'el-icon-s-order' }
-      }
-    ]
-  },
-
-  {
-    path: '/evaluation',
-    component: Layout,
-    children: [
+      },
       {
         path: 'add',
-        name: 'Evaluation',
-        component: () => import('@/views/evaluation/index')
+        name: 'addQuestion',
+        component: () => import('@/views/question/components/add'),
+        hidden: true
       }
     ]
   },
@@ -86,12 +80,12 @@ export const constantRoutes = [
     children: [
       {
         path: 'fill',
-        component: () => import('@/views/question/index')
+        component: () => import('@/views/question/components/fill')
       },
       {
         path: 'result',
         hidden: true,
-        component: () => import('@/views/result/index'),
+        component: () => import('@/views/question/components/result'),
         // meta: { title: '结果查询', icon: 'el-icon-s-order' }
       }
     ]
@@ -102,7 +96,7 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'add',
+        path: 'list',
         name: 'Evaluation',
         component: () => import('@/views/users/index'),
         meta: { title: '用户管理', icon: 'el-icon-user-solid' }

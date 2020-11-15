@@ -57,8 +57,14 @@ export default {
   methods: {
     fetchData() {
       api.getUserData().then(response => {
-          this.tableData = response.data
+        const data = response.data
+        data.forEach((item, index) => {
+          if (item.name === 'admin') {
+            delete data[index]
+          }
         })
+        this.tableData = data
+      })
     },
 
     beforeAvatarUpload(file) {

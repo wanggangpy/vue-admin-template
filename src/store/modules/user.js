@@ -1,4 +1,5 @@
-import { login, logout, getInfo } from '@/api/user'
+import { logout, getInfo } from '@/api/user'
+import { login, getUserData } from '@/api/w'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -30,39 +31,39 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    commit('SET_TOKEN', '11111111')
-    setToken('11111111')
-    // const { username, password } = userInfo
-    // return new Promise((resolve, reject) => {
-    //   login({ username: username.trim(), password: password }).then(response => {
-    //     commit('SET_TOKEN', response.token)
-    //     setToken(response.token)
-    //     resolve()
-    //   }).catch(error => {
-    //     reject(error)
-    //     console.log(error)
-    //   })
-    // })
+    // const tokne = Math.random().toString(36).slice(-16)
+    // commit('SET_TOKEN', tokne)
+    // setToken(tokne)
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      login({ username: username.trim(), password: password }).then(response => {
+        if (response.data.token) {
+          commit('SET_TOKEN', response.data.token)
+          setToken(response.data.token)
+          resolve()
+        }
+      }).catch(error => {
+        reject(error)
+      })
+    })
   },
 
   // get user info
   getInfo({ commit, state }) {
-    commit('SET_NAME', 'admin')
-    // return new Promise((resolve, reject) => {
-    //   getInfo(state.token).then(response => {
-    //     const { data } = response
-    //     console.log(data, 'data')
-    //     if (!data) {
-    //       return reject('Verification failed, please Login again.')
-    //     }
-
-    //     const { username } = data
-    //     commit('SET_NAME', username)
-    //     resolve(data)
-    //   }).catch(error => {
-    //     reject(error)
-    //   })
-    // })
+    commit('SET_NAME', state.name)
+    return new Promise((resolve, reject) => {
+      getUserData().then(response => {
+        response.data.forEach((item) => {
+          if (state.token === item.token) {
+            commit('SET_NAME', { 'k': item.id, 'v': item.username })
+            resolve(item)
+            return true
+          }
+        })
+      }).catch(error => {
+        reject(error)
+      })
+    })
   },
 
   // user logout

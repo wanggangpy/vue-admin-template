@@ -23,19 +23,19 @@
             {{ scope.row.title }}
           </template>
         </el-table-column>
-        <el-table-column label="开始时间" width="150" align="center">
+        <el-table-column label="开始时间" align="center">
           <template slot-scope="scope">
-            {{ scope.row.start_time }}
+            {{ scope.row.start_at }}
           </template>
         </el-table-column>
-        <el-table-column label="结束时间" width="150" align="center">
+        <el-table-column label="结束时间" align="center">
           <template slot-scope="scope">
-            {{ scope.row.end_time }}
+            {{ scope.row.end_at }}
           </template>
         </el-table-column>
         <el-table-column align="center" prop="created_at" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button v-if="!scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="$router.push({ path: '/question/fill' })">填写</el-button>
+            <el-button v-if="scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="$router.push({ path: '/question/fill', query: {'data': scope.row} })">填写</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -45,6 +45,7 @@
 
 <script>
 import { getList } from '@/api/table'
+import * as api from '@/api/w'
 
 export default {
 
@@ -52,19 +53,18 @@ export default {
     return {
       list: null,
       listLoading: false,
-      dataList: [
-        { id: 1, title: '松材线虫病防控绩效评估综合评价表', start_time: '2020-11-11', end_time: '2020-11-20' },
-      ]
+      dataList: []
     }
   },
   created() {
-    // this.fetchData()
+    console.log(this.$store.state.user.name.k)
+    this.fetchData()
   },
   methods: {
     fetchData() {
       this.listLoading = true
-      getList().then(response => {
-        this.list = response.data_list
+      api.getUserQuestionData(this.$store.state.user.name.k).then(response => {
+        this.dataList = response.data
         this.listLoading = false
       })
     }

@@ -22,6 +22,13 @@ export function getQuestionData() {
   })
 }
 
+export function getUserQuestionData(uid) {
+  return request({
+    url: `/question?a=getUserQuestion&uid=${uid}`,
+    method: 'get'
+  })
+}
+
 export function addQuestion(data, action='add') {
   return request({
     url: `/question?a=${action}`,
@@ -38,7 +45,7 @@ export function updateQuestion(id, data) {
   })
 }
 
-export function deleteQuestion(id) {
+export function deleteQuestion(id, data) {
   return request({
     url: `/question\${id}`,
     method: 'delete',
@@ -46,9 +53,17 @@ export function deleteQuestion(id) {
   })
 }
 
+export function login(data) {
+  return request({
+    url: '/user/login',
+    method: 'post',
+    data
+  })
+}
+
 export function logout() {
   return request({
-    url: '/vue-admin-template/user/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }

@@ -53,24 +53,33 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import * as api from '@/api/w'
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
+      api.getUserData().then(response => {
+        const userData = response.data
+        const userList = []
+        userData.forEach((item, index) => {
+          userList.push(item.username)
+        })
+        if (userList.indexOf(value.trim()) >= 0) {
+          callback()
+        } else {
+          callback(new Error('用户名不存在'))
+        }
+      })
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
+      api.login(this.loginForm).then(response => {
+        if (response.data.token) {
+          callback()
+        } else {
+          callback(new Error('密码错误'))
+        }
+      })
     }
     return {
       loginForm: {
@@ -116,7 +125,6 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })

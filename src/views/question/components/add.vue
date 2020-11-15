@@ -1,7 +1,7 @@
 <template>
   <div class="add-Question">
     <el-row>
-      <el-form :rules="questionTitleRules" ref="titleForm" :model="QuestionForm">
+      <el-form ref="titleForm" :rules="questionTitleRules" :model="QuestionForm">
         <el-form-item prop="title">
           <el-input v-model="QuestionForm.title" placeholder="问卷标题" />
         </el-form-item>
@@ -15,8 +15,8 @@
           type="datetimerange"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
+          end-placeholder="结束日期"
+        />
       </div>
     </el-row>
     <el-row v-for="(content,cindex) in QuestionForm.content" :key="cindex">
@@ -27,12 +27,12 @@
         </div>
         <div class="text item">
           <el-tabs tab-position="left" style="min-height: 200px;">
-            <el-tab-pane :label="section.title" v-for="(section, sindex) in content.section_list" :key="sindex">
-              <div class="item-box" v-for="(item, iindex) in section.item_list" :key="iindex">
+            <el-tab-pane v-for="(section, sindex) in content.section_list" :key="sindex" :label="section.title">
+              <div v-for="(item, iindex) in section.item_list" :key="iindex" class="item-box">
                 <p>{{ iindex + 1 }}，({{ item.title }})，{{ item.content }}</p>
                 <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
               </div>
-              <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex"></el-button>
+              <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex" />
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -45,12 +45,12 @@
       <el-button type="success" @click="$router.push({path: '/QuestionManage/list'})">返回</el-button>
     </el-row>
     <el-dialog width="25%" title="添加评估内容" :visible.sync="contentVisible">
-      <el-form :model="contentForm" :rules="contentRules" ref="contentForm">
+      <el-form ref="contentForm" :model="contentForm" :rules="contentRules">
         <el-form-item label="评估内容标题" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="contentForm.title"></el-input>
+          <el-input v-model="contentForm.title" />
         </el-form-item>
         <el-form-item label="评估内容权重" :label-width="formLabelWidth" prop="weights">
-          <el-input v-model="contentForm.weights"></el-input>
+          <el-input v-model="contentForm.weights" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -60,12 +60,12 @@
     </el-dialog>
 
     <el-dialog width="25%" title="添加分部内容" :visible.sync="sectionVisible">
-      <el-form :model="sectionForm" :rules="sectionRules" ref="sectionForm">
+      <el-form ref="sectionForm" :model="sectionForm" :rules="sectionRules">
         <el-form-item label="分部内容标题" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="sectionForm.title"></el-input>
+          <el-input v-model="sectionForm.title" />
         </el-form-item>
         <el-form-item label="分部分数" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="sectionForm.score"></el-input>
+          <el-input v-model="sectionForm.score" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -75,29 +75,29 @@
     </el-dialog>
 
     <el-dialog width="25%" title="添加分项内容" :visible.sync="itemVisible">
-      <el-form :model="itemForm" :rules="itemRules" ref="itemForm">
+      <el-form ref="itemForm" :model="itemForm" :rules="itemRules">
         <el-form-item label="分项内容标题" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="itemForm.title"></el-input>
+          <el-input v-model="itemForm.title" />
         </el-form-item>
         <el-form-item label="分项内容" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="itemForm.content"></el-input>
+          <el-input v-model="itemForm.content" />
         </el-form-item>
         <el-form-item label="分项分数" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="itemForm.score"></el-input>
+          <el-input v-model="itemForm.score" />
         </el-form-item>
-        <el-form-item :label="`选项`+cindex" :label-width="formLabelWidth" v-for="(choose, cindex) in itemForm.chooses" :key="cindex">
+        <el-form-item v-for="(choose, cindex) in itemForm.chooses" :key="cindex" :label="`选项`+cindex" :label-width="formLabelWidth">
           <el-col :span="12">
-            <el-input v-model="choose.title"></el-input>
+            <el-input v-model="choose.title" />
           </el-col>
           <el-col class="line" :span="3" style="text-align:center">分数</el-col>
           <el-col :span="5">
-            <el-input v-model="choose.choose_score"></el-input>
+            <el-input v-model="choose.choose_score" />
           </el-col>
-           <el-col class="line" :span="4" style="text-align:center">
-             <span @click.prevent="delIChoose(cindex)">
-               删除
-             </span>
-           </el-col>
+          <el-col class="line" :span="4" style="text-align:center">
+            <span @click.prevent="delIChoose(cindex)">
+              删除
+            </span>
+          </el-col>
         </el-form-item>
       </el-form>
       <el-button type="primary" style="margin-left:110px" size="mini" @click="addChoose">添加选项</el-button>
@@ -133,7 +133,7 @@ export default {
       questionTitleRules: {
         title: [
           { required: true, message: '请输入问卷标题', trigger: 'blur' }
-        ]},
+        ] },
       contentRules: {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
@@ -173,7 +173,7 @@ export default {
         score: [
           { required: true, message: '请输入分数', trigger: 'blur' }
         ]
-      },
+      }
 
     }
   },
@@ -184,20 +184,19 @@ export default {
   methods: {
     fetchData() {
       api.getQuestionData().then(response => {
-        this.QuestionForm = response.data[this.$route.query.id - 1]
-        console.log(this.QuestionForm)
+        if (response.data.length !== 0) {
+          this.QuestionForm = response.data[this.$route.query.id - 1]
+        }
       })
     },
     saveQuestion() {
       this.$refs.titleForm.validate((valid) => {
         if (valid) {
-        this.QuestionForm.title = this.questionTitle.title
-        this.QuestionForm.surveyTime = this.surveyTime
-        console.log(this.QuestionForm)
-        api.addQuestion(this.QuestionForm).then(response => {
-          this.$router.push('/questionManage/list')
-          this.$message.success('保存成功')
-        })
+          this.QuestionForm.surveyTime = this.surveyTime
+          api.addQuestion(this.QuestionForm).then(response => {
+            this.$router.push('/questionManage/list')
+            this.$message.success('保存成功')
+          })
         } else {
           return false
         }
@@ -256,7 +255,7 @@ export default {
       })
     },
     delIChoose(item) {
-      let index = this.itemForm.chooses.indexOf(item)
+      const index = this.itemForm.chooses.indexOf(item)
       this.itemForm.chooses.splice(index, 1)
     },
     onCancel() {

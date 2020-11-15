@@ -107,8 +107,8 @@ export default {
       startRules: {
         users: [
           { required: true, message: '请选择调研人员', trigger: 'blur' }
-        ]},
-      startQuestionId: '',
+        ] },
+      startQuestionId: ''
     }
   },
   created() {
@@ -129,7 +129,7 @@ export default {
     startQuestion() {
       this.$refs.startForm.validate((valid) => {
         if (valid) {
-          api.updateQuestion(this.startQuestionId, {'status': true, 'survey_number': this.startForm.users.length}).then(response => {
+          api.updateQuestion(this.startQuestionId, { 'status': true, 'survey_number': this.startForm.users.length, 'users': this.startForm.users.join() }).then(response => {
             this.startVisible = false
             this.tableData.forEach((item, index) => {
               if (item.id === this.startQuestionId) {
@@ -145,13 +145,12 @@ export default {
     },
 
     stopQuestion(id) {
-      api.updateQuestion(id, {'status': false}).then(response => {
+      api.updateQuestion(id, { 'status': false }).then(response => {
         this.tableData.forEach((item, index) => {
           if (item.id === id) {
             this.tableData[index].status = false
           }
         })
-
       })
     },
 

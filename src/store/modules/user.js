@@ -1,5 +1,5 @@
 import { logout, getInfo } from '@/api/user'
-import { login, getUserData } from '@/api/w'
+import { login, getUserInfo } from '@/api/w'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -7,7 +7,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    roles: []
   }
 }
 
@@ -25,6 +26,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -41,6 +45,8 @@ const actions = {
           commit('SET_TOKEN', response.data.token)
           setToken(response.data.token)
           resolve()
+        } else {
+          reject(response.error)
         }
       }).catch(error => {
         reject(error)
@@ -50,16 +56,12 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-    commit('SET_NAME', state.name)
     return new Promise((resolve, reject) => {
-      getUserData().then(response => {
-        response.data.forEach((item) => {
-          if (state.token === item.token) {
-            commit('SET_NAME', { 'k': item.id, 'v': item.username })
-            resolve(item)
-            return true
-          }
-        })
+      getUserInfo(state.token).then(response => {
+        commit('SET_NAME', { 'k': response.data.id, 'v': response.data.username })
+        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+        commit('SET_ROLES', response.data.roles)
+        resolve(response.data)
       }).catch(error => {
         reject(error)
       })
@@ -85,6 +87,7 @@ const actions = {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
+      commit('SET_ROLES', [])
       resolve()
     })
   }

@@ -15,6 +15,14 @@ export function getUserData() {
   })
 }
 
+export function getUserInfo(token) {
+  return request({
+    url: `/user?a=getUserInfo&token=${token}`,
+    method: 'get'
+  })
+}
+
+
 export function getQuestionData() {
   return request({
     url: '/question',
@@ -30,6 +38,14 @@ export function getUserQuestionData(uid) {
 }
 
 export function addQuestion(data, action='add') {
+  return request({
+    url: `/question?a=${action}`,
+    method: 'post',
+    data
+  })
+}
+
+export function resultQuestion(data, action='result') {
   return request({
     url: `/question?a=${action}`,
     method: 'post',

@@ -2,10 +2,10 @@
   <div class="app-container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span class="card-title">定性</span>
+        <span class="card-title">{{ tableData.title }}</span>
       </div>
       <el-table
-        :data="tableData" style="width: 100%" border
+        :data="tableData.data" style="width: 100%" border
         :header-row-style="{height:'2px'}"
         :cell-style="{padding:'2px'}"
         :header-cell-style="{padding:'2px'}"
@@ -20,7 +20,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="evaluate" label="评价参考用语" header-align="center"></el-table-column>
-        <el-table-column label="评估分值与等级" width="180" header-align="center">
+        <el-table-column label="评估分值与等级" header-align="center">
           <el-table-column prop="" label="≥95" width="80" header-align="center">
             <el-table-column prop="grades_IV" label="IV" width="80" header-align="center">
               <template slot-scope="scope">
@@ -29,14 +29,14 @@
             </el-table-column>
           </el-table-column>
           <el-table-column prop="" label="95>p≥80" width="80" header-align="center">
-            <el-table-column prop="grades_III" label="III" width="80" header-align="center">
+            <el-table-column prop="grades_III" label="III" width="90" header-align="center">
               <template slot-scope="scope">
                 <div v-html="scope.row.grades_III"></div>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column prop="" label="80>p≥70" width="80" header-align="center">
-            <el-table-column prop="grades_II" label="II" width="80" header-align="center">
+            <el-table-column prop="grades_II" label="II" width="90" header-align="center">
               <template slot-scope="scope">
                 <div v-html="scope.row.grades_II"></div>
               </template>
@@ -61,7 +61,7 @@
 export default {
   data() {
     return {
-      tableData: [
+      tableData: { 'title': '松材线虫病防控绩效评估综合评价表（定性）', 'data' : [
         {'id': 1, 'content': '组织管理', 'item': '<strong>评价结果</strong>', 'evaluate': '', 'grades_IV': '<strong>优秀</strong>', 'grades_III': '<strong>良好</strong>', 'grades_II': '<strong>一般</strong>', 'grades_I': '<strong>较差</strong>', 'c': ''},
         {'id': 1, 'content': '组织管理', 'item': '1.政府主体', 'evaluate': '领导*重视', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '比较', 'grades_I': '不够', 'c': ''},
         {'id': 1, 'content': '组织管理', 'item': '1.政府主体', 'evaluate': '资金落实*到位', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '比较', 'grades_I': '不够', 'c': ''},
@@ -108,7 +108,7 @@ export default {
         {'id': 6, 'content': '整体评价', 'item': '实施执行', 'evaluate': '队伍*专业、措施*扎实、操作*规范、安全管理*到位', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '比较', 'grades_I': '不够', 'c': ''},
         {'id': 6, 'content': '整体评价', 'item': '防控效果', 'evaluate': '防控效果*好', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '比较', 'grades_I': '不够', 'c': ''},
         {'id': '备注：大幅是指变幅≥30%以上，变化不大是指变幅＜10%以下', 'content': '', 'item': '', 'evaluate': '', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '', 'grades_I': '', 'c': ''},
-      ]
+      ]}
     }
   },
   methods: {
@@ -298,7 +298,7 @@ export default {
 </script>
 
 <style scoped>
-.line{
+.clearfix{
   text-align: center;
 }
 .card-title {

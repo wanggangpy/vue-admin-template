@@ -56,14 +56,40 @@ export const constantRoutes = [
   },
 
   {
+    path: '/question',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        'name': 'fill',
+        path: 'fill',
+        component: () => import('@/views/question/components/fill')
+      },
+      {
+        path: 'result',
+        component: () => import('@/views/question/components/result'),
+      }
+    ]
+  },
+
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+
+  {
     path: '/questionManage',
     component: Layout,
+    meta: { roles: ['admin'] },
     children: [
       {
         path: 'list',
         name: 'questionManage',
         component: () => import('@/views/question/index'),
-        meta: { title: '问卷管理', icon: 'el-icon-s-order' }
+        meta: { title: '问卷管理', icon: 'el-icon-s-order' },
       },
       {
         path: 'add',
@@ -75,38 +101,22 @@ export const constantRoutes = [
   },
 
   {
-    path: '/question',
-    component: Layout,
-    children: [
-      {
-        path: 'fill',
-        component: () => import('@/views/question/components/fill')
-      },
-      {
-        path: 'result',
-        hidden: true,
-        component: () => import('@/views/question/components/result'),
-        // meta: { title: '结果查询', icon: 'el-icon-s-order' }
-      }
-    ]
-  },
-
-  {
     path: '/users',
     component: Layout,
+    meta: { roles: ['admin'] },
     children: [
       {
         path: 'list',
-        name: 'Evaluation',
+        name: 'users',
         component: () => import('@/views/users/index'),
-        meta: { title: '用户管理', icon: 'el-icon-user-solid' }
+        meta: { title: '用户管理', icon: 'el-icon-user-solid'},
       }
     ]
   },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
-]
+  ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

@@ -53,42 +53,18 @@
 </template>
 
 <script>
-import * as api from '@/api/w'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      api.getUserData().then(response => {
-        const userData = response.data
-        const userList = []
-        userData.forEach((item, index) => {
-          userList.push(item.username)
-        })
-        if (userList.indexOf(value.trim()) >= 0) {
-          callback()
-        } else {
-          callback(new Error('用户名不存在'))
-        }
-      })
-    }
-    const validatePassword = (rule, value, callback) => {
-      api.login(this.loginForm).then(response => {
-        if (response.data.token) {
-          callback()
-        } else {
-          callback(new Error('密码错误'))
-        }
-      })
-    }
     return {
       loginForm: {
         username: 'admin',
         password: '123456'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [{ required: true, trigger: 'blur', message: '请输入用户名' }],
+        password: [{ required: true, trigger: 'blur', message: '请输入密码' }]
       },
       loading: false,
       passwordType: 'password',
@@ -121,8 +97,9 @@ export default {
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
-          }).catch(() => {
+          }).catch((error) => {
             this.loading = false
+            this.$message.error(error)
           })
         } else {
           return false
@@ -214,7 +191,6 @@ $light_gray:#090031;
       }
     }
 
-
     .svg-container {
       padding: 6px 5px 6px 15px;
       color: $dark_gray;
@@ -247,5 +223,3 @@ $light_gray:#090031;
 
 }
 </style>
-
-

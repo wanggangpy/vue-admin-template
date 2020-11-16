@@ -18,7 +18,7 @@
             {{ scope.row.id }}
           </template>
         </el-table-column>
-        <el-table-column label="Title">
+        <el-table-column label="标题">
           <template slot-scope="scope">
             {{ scope.row.title }}
           </template>
@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column align="center" prop="created_at" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="$router.push({ path: '/question/fill', query: {'data': scope.row} })">填写</el-button>
+            <el-button v-if="scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)">填写</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,7 +57,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$store.state.user.name.k)
     this.fetchData()
   },
   methods: {
@@ -67,6 +66,16 @@ export default {
         this.dataList = response.data
         this.listLoading = false
       })
+    },
+    fillClick(row) {
+      const nowData = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes())
+      if (nowData > new Date(row.end_at)){
+        this.$message.error('填写问卷时间已过不能填写！')
+      } else if (nowData < new Date(row.start_at)) {
+        this.$message.error('填写问卷时间没到不能填写！')
+      } else {
+        this.$router.push({path: '/question/fill', query: {'data': JSON.stringify(row)}})
+      }
     }
   }
 }

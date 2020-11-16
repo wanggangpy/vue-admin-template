@@ -37,7 +37,8 @@ export default {
       questionData: '',
       cnIndex: { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 7: '七', 8: '八' },
       fillQuestionRules: {
-      }
+      },
+      errorList: [],
     }
   },
   created() {
@@ -46,11 +47,35 @@ export default {
   },
   methods: {
     commitQuestion() {
+      
+      this.errorList = []
+      this.deepObj(this.questionData)
+
+      if (this.errorList.length){
+        this.$message.error(`${this.errorList[0]}, 未填写!`)
+        return false
+      }
       resultQuestion(this.questionData).then(response => {
-        this.$router.push({ path: '/question/result' })
         this.$message.success('提交成功！')
+        this.$router.push({path:'/question/result'})
       })
-    }
+    },
+
+    deepObj( obj ) { 
+      for( var i in obj ) { 
+          if (i === 'item_list'){
+            obj[i].forEach(item => {
+              if (item.scoring === undefined) {
+                this.errorList.push(item.content)
+              }
+            });
+            continue
+          }
+          if ( typeof obj[i] === "object" ) { 
+              this.deepObj( obj[i] ); 
+          }
+      } 
+    } 
 
   }
 }

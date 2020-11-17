@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     commitQuestion() {
-      
+
       this.errorList = []
       this.deepObj(this.questionData)
 
@@ -55,14 +55,17 @@ export default {
         this.$message.error(`${this.errorList[0]}, 未填写!`)
         return false
       }
+      const data = this.questionData
+      const userId = this.$store.state.user.name.k
+      data.uid = userId
       resultQuestion(this.questionData).then(response => {
         this.$message.success('提交成功！')
-        this.$router.push({path:'/question/result'})
+        this.$router.push({path:'/question/result', query: { uid: userId, title: this.questionData.title}})
       })
     },
 
-    deepObj( obj ) { 
-      for( var i in obj ) { 
+    deepObj( obj ) {
+      for( var i in obj ) {
           if (i === 'item_list'){
             obj[i].forEach(item => {
               if (item.scoring === undefined) {
@@ -71,11 +74,11 @@ export default {
             });
             continue
           }
-          if ( typeof obj[i] === "object" ) { 
-              this.deepObj( obj[i] ); 
+          if ( typeof obj[i] === "object" ) {
+              this.deepObj( obj[i] );
           }
-      } 
-    } 
+      }
+    }
 
   }
 }

@@ -36,6 +36,7 @@
         <el-table-column align="center" prop="created_at" label="操作" width="200">
           <template slot-scope="scope">
             <el-button v-if="scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)">填写</el-button>
+            <el-button v-else type="info" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)" disabled>填写</el-button>
           </template>
         </el-table-column>
       </el-table>

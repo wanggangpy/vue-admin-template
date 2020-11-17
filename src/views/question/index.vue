@@ -24,12 +24,12 @@
             {{ scope.row.title }}
           </template>
         </el-table-column>
-        <el-table-column label="调研人数" width="80" align="center">
+        <el-table-column label="调研人数" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.survey_number }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="完成人数" width="100" align="center">
+        <el-table-column label="完成人数" align="center">
           <template slot-scope="scope">
             <el-progress v-if="scope.row.completed_number > 0" type="circle" :width="50" :percentage="(scope.row.survey_number - scope.row.completed_number) / scope.row.survey_number"></el-progress>
             <el-progress v-else type="circle" :width="50" :percentage="0"></el-progress>
@@ -52,7 +52,7 @@
             {{ scope.row.status ? '启动中' : '停止' }}
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="created_at" label="操作">
+        <el-table-column align="center" prop="created_at" label="操作" width="250">
           <template slot-scope="scope">
             <el-button v-if="!scope.row.status" type="success" icon="el-icon-video-play" size="mini" @click="startVisible = true, startQuestionId = scope.row.id">开始</el-button>
             <el-button v-if="!scope.row.status" type="info" icon="el-icon-edit" size="mini" @click="$router.push({path: '/questionManage/add', query: {id: scope.row.id}})">编辑</el-button>
@@ -145,7 +145,7 @@ export default {
     },
 
     stopQuestion(id) {
-      api.updateQuestion(id, { 'status': false }).then(response => {
+      api.updateQuestion(id, { 'status': false, 'users': '' }).then(response => {
         this.tableData.forEach((item, index) => {
           if (item.id === id) {
             this.tableData[index].status = false

@@ -51,6 +51,13 @@ export function getUserQuestionResult(uid, title) {
   })
 }
 
+export function getQuestionResult() {
+  return request({
+    url: '/question?a=getQuestionResult&',
+    method: 'get'
+  })
+}
+
 export function addQuestion(data, action='add') {
   return request({
     url: `/question?a=${action}`,

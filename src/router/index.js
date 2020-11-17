@@ -100,6 +100,20 @@ export const asyncRoutes = [
     ]
   },
 
+    {
+    path: '/result',
+    component: Layout,
+    meta: { roles: ['admin'] },
+    children: [
+      {
+        path: 'list',
+        name: 'result',
+        component: () => import('@/views/result/index'),
+        meta: { title: '调研结果', icon: 'el-icon-s-data'},
+      }
+    ]
+  },
+
   {
     path: '/users',
     component: Layout,

@@ -92,13 +92,11 @@ export const constantRoutes = [
       {
         path: 'result',
         name: 'Result',
-        component: () => import('@/views/result/index'),
+        component: () => import('@/views/result/index')
         // meta: { title: '结果查询', icon: 'el-icon-s-order' }
       }
     ]
   },
-
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

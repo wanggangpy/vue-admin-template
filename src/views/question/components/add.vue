@@ -27,8 +27,9 @@
           <el-button style="float: right; padding: 3px 0" type="text" @click="sectionVisible = true, contentIndex=cindex">添加</el-button>
         </div>
         <div class="text item">
-          <el-tabs tab-position="left" style="min-height: 200px;">
-            <el-tab-pane v-for="(section, sindex) in content.section_list" :key="sindex" :label="section.title">
+          <el-tabs tab-position="left" v-model="activeName" @tab-click="handleClick" style="min-height: 200px;">
+            <el-tab-pane v-for="(section, sindex) in content.section_list" :key="sindex" :name="'section'+sindex">
+              <span slot="label" style="z-index: 5000;">{{ section.title }} <i class="el-icon-edit" v-show="'section'+sindex === activeName" @click="editSection(section, cindex, sindex)"></i> </span>
               <div v-for="(item, iindex) in section.item_list" :key="iindex" class="item-box">
                 <p>{{ iindex + 1 }}，({{ item.title }})，{{ item.content }}</p>
                 <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
@@ -178,6 +179,7 @@ export default {
           { required: true, message: '请输入分数', trigger: 'blur' }
         ]
       },
+      activeName:'section0'
 
     }
   },
@@ -213,6 +215,9 @@ export default {
         }
       })
     },
+    handleClick(tab, event) {
+      this.activeName = tab.name
+    },
     addContent(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -231,17 +236,24 @@ export default {
     addSection(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.QuestionForm.content[this.contentIndex].section_list.push(this.sectionForm)
-          this.sectionVisible = false
-          this.sectionForm = {
-            title: '',
-            score: '',
-            item_list: []
-          }
+          console.log(this.QuestionForm.content[this.contentIndex].section_list)
+          // this.QuestionForm.content[this.contentIndex].section_list.push(this.sectionForm)
+          // this.sectionVisible = false
+          // this.sectionForm = {
+          //   title: '',
+          //   score: '',
+          //   item_list: []
+          // }
         } else {
           return false
         }
       })
+    },
+    editSection(section, cindex, sindex){
+      this.contentIndex = cindex
+      this.sectionIndex = sindex
+      this.sectionVisible = true
+      this.sectionForm = section
     },
     addItem(formName) {
       this.$refs[formName].validate((valid) => {
@@ -295,4 +307,3 @@ export default {
 }
 
 </style>
-

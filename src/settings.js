@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: '问卷管理系统',
+  title: 'Test',
 
   /**
    * @type {boolean} true | false

@@ -3,14 +3,17 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span class="card-title">用户列表</span>
-        <el-button size="small" type="primary" style="float: right;" @click.native="uploadDialogVisible = true">导入用户</el-button>
+        <el-button v-show="delUserList.length" type="danger" size="mini" style="float: right;">删除</el-button>
+        <el-button v-show="!delUserList.length" size="mini" type="primary" style="float: right;" @click.native="uploadDialogVisible = true">导入用户</el-button>
       </div>
       <el-table
         v-loading="listLoading"
         :data="tableData"
         element-loading-text="Loading"
         style="width: 100%"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="username" label="用户名" width="180" />
         <el-table-column prop="name" label="姓名" width="180" />
         <el-table-column prop="telephone" label="电话" />
@@ -52,7 +55,8 @@ export default {
       dialogWidth: '30%',
       uploadApi: process.env.VUE_APP_BASE_API + '/upload',
       uploadFileType: '.xls,.xlsx',
-      importUserDemoUrl: process.env.VUE_APP_BASE_API + '/download?file=模板.xlsx'
+      importUserDemoUrl: process.env.VUE_APP_BASE_API + '/download?file=模板.xlsx',
+      delUserList: []
     }
   },
   created() {
@@ -99,6 +103,10 @@ export default {
         this.$message.success('导入用户成功')
       })
       this.uploadDialogVisible = false
+    },
+
+    handleSelectionChange(val) {
+      this.delUserList = val
     }
 
   }
@@ -117,4 +125,3 @@ export default {
     text-align: center;
   }
 </style>
-

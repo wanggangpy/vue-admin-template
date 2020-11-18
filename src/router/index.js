@@ -100,27 +100,37 @@ export const asyncRoutes = [
     ]
   },
 
-  {
+    {
     path: '/result',
     component: Layout,
     meta: { roles: ['admin'] },
     children: [
       {
-        path: 'fill',
-        name: 'Question',
-        component: () => import('@/views/question/index')
-      },
-      {
-        path: 'result',
-        name: 'Result',
-        component: () => import('@/views/result/index')
-        // meta: { title: '结果查询', icon: 'el-icon-s-order' }
+        path: 'list',
+        name: 'result',
+        component: () => import('@/views/result/index'),
+        meta: { title: '调研结果', icon: 'el-icon-s-data'},
       }
     ]
   },
+
+  {
+    path: '/users',
+    component: Layout,
+    meta: { roles: ['admin'] },
+    children: [
+      {
+        path: 'list',
+        name: 'users',
+        component: () => import('@/views/users/index'),
+        meta: { title: '用户管理', icon: 'el-icon-user-solid'},
+      }
+    ]
+  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
-]
+  ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

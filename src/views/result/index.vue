@@ -3,13 +3,16 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span class="card-title">调研列表</span>
+        <el-button v-show="delResultList.length" type="danger" size="mini" style="float: right;">删除</el-button>
       </div>
       <el-table
         v-loading="listLoading"
         :data="tableData"
         element-loading-text="Loading"
         style="width: 100%"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题" />
         <el-table-column prop="user" label="调研人员" />
         <el-table-column prop="created_at" label="日期" />
@@ -33,7 +36,8 @@ export default {
       tableData: [],
       uploadDialogVisible: false,
       listLoading: false,
-      dialogWidth: '30%'
+      dialogWidth: '30%',
+      delResultList: []
     }
   },
   created() {
@@ -47,6 +51,10 @@ export default {
         this.listLoading = false
       })
     },
+
+    handleSelectionChange(val) {
+      this.delResultList = val
+    }
 
   }
 }
@@ -64,4 +72,3 @@ export default {
     text-align: center;
   }
 </style>
-

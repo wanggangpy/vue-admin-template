@@ -38,12 +38,12 @@ module.exports = {
     },
     disableHostCheck: true,
     // before: require('./mock/mock-server.js')
-    proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: 'http://localhost:8000',
-        changeOrigin: true
-      }
-    }
+    // proxy: {
+    //   [process.env.VUE_APP_BASE_API]: {
+    //     target: 'http://nb33.3322.org:3322',
+    //     changeOrigin: true
+    //   }
+    // }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

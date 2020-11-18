@@ -56,33 +56,54 @@ export const constantRoutes = [
   },
 
   {
-    path: '/evaluationManage',
+    path: '/question',
     component: Layout,
+    hidden: true,
+    children: [
+      {
+        'name': 'fill',
+        path: 'fill',
+        component: () => import('@/views/question/components/fill')
+      },
+      {
+        path: 'result',
+        component: () => import('@/views/question/components/result'),
+      }
+    ]
+  },
+
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+
+  {
+    path: '/questionManage',
+    component: Layout,
+    meta: { roles: ['admin'] },
     children: [
       {
         path: 'list',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '问卷管理', icon: 'table' }
-      }
-    ]
-  },
-
-  {
-    path: '/evaluation',
-    component: Layout,
-    children: [
+        name: 'questionManage',
+        component: () => import('@/views/question/index'),
+        meta: { title: '问卷管理', icon: 'el-icon-s-order' },
+      },
       {
         path: 'add',
-        name: 'Evaluation',
-        component: () => import('@/views/evaluation/index')
+        name: 'addQuestion',
+        component: () => import('@/views/question/components/add'),
+        hidden: true
       }
     ]
   },
 
   {
-    path: '/question',
+    path: '/result',
     component: Layout,
+    meta: { roles: ['admin'] },
     children: [
       {
         path: 'fill',

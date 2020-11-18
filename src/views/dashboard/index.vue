@@ -35,8 +35,13 @@
         </el-table-column>
         <el-table-column align="center" prop="created_at" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)">填写</el-button>
-            <el-button v-else type="info" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)" disabled>填写</el-button>
+            <div v-if="scope.row.fill">
+              <el-button type="primary" size="mini" @click="$router.push({path:'/question/result', query: { uid: $store.state.user.name.k, title: scope.row.title}})">查看结果</el-button>
+            </div>
+            <div v-else>
+              <el-button v-if="scope.row.status" type="success" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)">填写</el-button>
+              <el-button v-else type="info" icon="el-icon-edit" size="mini" @click="fillClick(scope.row)" disabled>填写</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>

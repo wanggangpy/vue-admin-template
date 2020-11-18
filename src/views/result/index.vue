@@ -1,0 +1,67 @@
+<template>
+  <div class="app-container">
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span class="card-title">调研列表</span>
+      </div>
+      <el-table
+        v-loading="listLoading"
+        :data="tableData"
+        element-loading-text="Loading"
+        style="width: 100%"
+      >
+        <el-table-column prop="title" label="标题" />
+        <el-table-column prop="user" label="调研人员" />
+        <el-table-column prop="created_at" label="日期" />
+        <el-table-column align="center" prop="created_at" label="操作" width="250">
+          <template slot-scope="scope">
+            <el-button type="success" icon="el-icon-video-play" size="mini" @click="$router.push({path:'/question/result', query: { uid: scope.row.uid, title: scope.row.title}})">查看</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+  </div>
+</template>
+
+<script>
+import * as api from '@/api/w'
+
+export default {
+  data() {
+    return {
+      tableData: [],
+      uploadDialogVisible: false,
+      listLoading: false,
+      dialogWidth: '30%'
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      api.getQuestionResult().then(response => {
+        this.tableData = response.data
+        this.listLoading = false
+      })
+    },
+
+  }
+}
+</script>
+
+  <style scoped>
+  .line{
+    text-align: center;
+  }
+  .card-title {
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .upload-demo {
+    text-align: center;
+  }
+</style>
+

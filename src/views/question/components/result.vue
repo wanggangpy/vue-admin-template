@@ -62,7 +62,8 @@ import { getUserQuestionResult } from '@/api/w'
 export default {
   data() {
     return {
-      tableData: { 'title': '松材线虫病防控绩效评估综合评价表（定性）', 'data' : [
+      tableData: {},
+      tableData1: { 'title': '松材线虫病防控绩效评估综合评价表（定性）', 'data' : [
         {'id': 1, 'content': '组织管理', 'item': '<strong>评价结果</strong>', 'evaluate': '', 'grades_IV': '<strong>优秀</strong>', 'grades_III': '<strong>良好</strong>', 'grades_II': '<strong>一般</strong>', 'grades_I': '<strong>较差</strong>', 'c': ''},
         {'id': 1, 'content': '组织管理', 'item': '1.政府主体', 'evaluate': '领导*重视', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '比较', 'grades_I': '不够', 'c': '123'},
         {'id': 1, 'content': '组织管理', 'item': '1.政府主体', 'evaluate': '资金落实*到位', 'grades_IV': '很', 'grades_III': '*', 'grades_II': '比较', 'grades_I': '不够', 'c': ''},

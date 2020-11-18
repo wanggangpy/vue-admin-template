@@ -31,7 +31,7 @@
         </el-table-column>
         <el-table-column label="完成人数" align="center">
           <template slot-scope="scope">
-            <el-progress v-if="scope.row.completed_number > 0" type="circle" :width="50" :percentage="(scope.row.survey_number - scope.row.completed_number) / scope.row.survey_number"></el-progress>
+            <el-progress v-if="scope.row.completed_number > 0" type="circle" :width="50" :percentage="(scope.row.completed_number / scope.row.survey_number * 100).toFixed(0)"></el-progress>
             <el-progress v-else type="circle" :width="50" :percentage="0"></el-progress>
           </template>
         </el-table-column>

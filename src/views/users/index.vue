@@ -74,22 +74,28 @@ export default {
     },
 
     beforeAvatarUpload(file) {
-      const checkFile = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(file.type)
+      // const checkFile = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(file.type)
       const isLt10M = file.size / 1024 / 1024 < 10
-      if (!checkFile) {
-        this.$message.error('上传文件只能是 EXCEL 文档!')
-      }
+      // if (!checkFile) {
+      //   this.$message.error('上传文件只能是 EXCEL 文档!')
+      // }
 
       if (!isLt10M) {
         this.$message.error('上传文件大小不能超过 10MB!')
       }
 
-      return checkFile && isLt10M
+      return isLt10M
     },
 
     handleAvatarSuccess(res, file) {
       api.importUser({ 'file': res }).then(response => {
-        this.tableData = response.data
+        const data = response.data
+        data.forEach((item, index) => {
+          if (item.name === 'admin') {
+            data.splice(index, 1)
+          }
+        })
+        this.tableData = data
         this.$message.success('导入用户成功')
       })
       this.uploadDialogVisible = false

@@ -94,7 +94,7 @@ export const asyncRoutes = [
       {
         path: 'add',
         name: 'addQuestion',
-        component: () => import('@/views/question/components/add'),
+        component: () => import('@/views/question/components/add/index'),
         hidden: true
       }
     ]

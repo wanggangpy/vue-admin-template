@@ -37,65 +37,11 @@
     </el-row>
 
     <el-row>
-      <el-button type="primary" @click="contentVisible = true">添加评估内容</el-button>
+      <AddContent @addContent="addContent"></AddContent>
       <el-button type="primary" @click="saveQuestion">保存问卷</el-button>
       <el-button type="success" @click="$router.push({path: '/QuestionManage/list'})">返回</el-button>
     </el-row>
-    <el-dialog width="35%" title="添加评估内容" :visible.sync="contentVisible">
-      <el-form class="content-form" ref="contentForm" label-position="top" :model="contentForm" :rules="contentRules">
 
-        <el-form-item required>
-          <el-col :span="16">
-            <el-form-item label="评估内容标题" prop="title">
-              <el-input v-model="contentForm.title" />
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="1"></el-col>
-          <el-col :span="7" :offset="1">
-            <el-form-item label="权重" prop="weights">
-              <el-input v-model="contentForm.weights" />
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-
-
-        <el-form-item required>
-          <el-col :span="8">
-            <el-form-item label="评估内容评语" prop="title">
-              <el-input v-model="contentForm.title" />
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="1"></el-col>
-          <el-col :span="3" :offset="1">
-            <el-form-item label="≥95" prop="weights">
-              <el-input v-model="contentForm.weights" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3" :offset="1">
-            <el-form-item label="95>p≥80" prop="weights">
-              <el-input v-model="contentForm.weights" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3" :offset="1">
-            <el-form-item label="80>p≥70" prop="weights">
-              <el-input v-model="contentForm.weights" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="3" :offset="1">
-            <el-form-item label="<70" prop="weights">
-              <el-input v-model="contentForm.weights" />
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-
-
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="contentVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addContent('contentForm')">确 定</el-button>
-      </div>
-    </el-dialog>
 
     <el-dialog width="25%" title="添加分部内容" :visible.sync="sectionVisible">
       <el-form ref="sectionForm" :model="sectionForm" :rules="sectionRules">
@@ -149,8 +95,12 @@
 
 <script>
   import * as api from '@/api/w'
+  import AddContent from './common/addContent'
 
   export default {
+    components: {
+      AddContent
+    },
     data() {
       return {
         surveyTime: [
@@ -167,14 +117,6 @@
           title: '',
           content: []
         },
-        contentVisible: false,
-        contentForm: {
-          title: '',
-          weights: '',
-          section_list: [],
-          opinion_list: []
-
-        },
         questionTitleRules: {
           title: [{
             required: true,
@@ -182,18 +124,7 @@
             trigger: 'blur'
           }]
         },
-        contentRules: {
-          title: [{
-            required: true,
-            message: '请输入标题',
-            trigger: 'blur'
-          }],
-          weights: [{
-            required: true,
-            message: '请输入权重',
-            trigger: 'blur'
-          }]
-        },
+
         sectionVisible: false,
         sectionForm: {
           title: '',
@@ -236,7 +167,7 @@
             trigger: 'blur'
           }]
         },
-        activeName: "00"
+        activeName: '00'
 
       }
     },
@@ -275,21 +206,10 @@
       handleClick(tab, index) {
         this.activeName = tab._data.index + index
       },
-      addContent(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.QuestionForm.content.push(this.contentForm)
-            this.contentVisible = false
-            this.contentForm = {
-              title: '',
-              weights: '',
-              section_list: []
-            }
-          } else {
-            return false
-          }
-        })
+      addContent(data){
+        this.QuestionForm.content.push(data)
       },
+
       addSection(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

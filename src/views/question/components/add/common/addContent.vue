@@ -1,6 +1,6 @@
 <template>
   <div class="add-content">
-    <el-button type="primary" @click="contentVisible = true">添加评估内容</el-button>
+    <el-button type="primary" @click="contentVisible = true" icon="el-icon-circle-plus" size="mini">添加评估内容</el-button>
     <el-dialog width="35%" title="添加评估内容" :visible.sync="contentVisible">
       <el-form class="content-form" ref="contentForm" label-position="top" :model="contentForm" :rules="contentRules">
         <el-form-item required>
@@ -12,7 +12,9 @@
           <el-col class="line" :span="1"></el-col>
           <el-col :span="7" :offset="1">
             <el-form-item label="权重" prop="weights">
-              <el-input v-model="contentForm.weights" />
+              <el-input v-model="contentForm.weights">
+				  <i slot="suffix">%</i>
+			  </el-input>
             </el-form-item>
           </el-col>
         </el-form-item>
@@ -29,7 +31,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="3" :offset="1">
-            <el-form-item label="95>p≥80" :prop="`opinion_list[${index}].grade2`" :rules="{ required: true, message: '等级内容为空', trigger: 'blur' }">
+            <el-form-item label="95>p≥80" :prop="`opinion_list[${index}].grade2`">
               <el-input v-model="opinion.grade2" />
             </el-form-item>
           </el-col>
@@ -48,7 +50,6 @@
           </el-col>
         </el-form-item>
       </el-form>
-
       <el-button type="primary" size="mini" icon="el-icon-circle-plus" @click="addOpinion()">添加</el-button>
       <div slot="footer" class="dialog-footer">
         <el-button @click="contentVisible = false">取 消</el-button>
@@ -134,7 +135,7 @@
 <style scoped>
   .add-content {
     display: inline-block;
-    margin-right: 20px;
+    float: right;
   }
 
   .del-opinion-btn {

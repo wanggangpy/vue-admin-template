@@ -1,63 +1,70 @@
 <template>
   <div class="add-Question">
     <el-row>
-      <el-form ref="titleForm" :rules="questionTitleRules" :model="QuestionForm">
-        <el-form-item prop="title">
-          <el-input v-model="QuestionForm.title" placeholder="问卷标题" />
-        </el-form-item>
-      </el-form>
-    </el-row>
-    <el-row>
-      <div class="block">
-        <span class="demonstration">问卷调研时间：</span>
-        <el-date-picker v-model="surveyTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至"
-          start-placeholder="开始日期" end-placeholder="结束日期" />
+      <div class="question-header">
+        <i class="el-icon-menu"></i>
+        <span class="question-title">问卷信息</span>
+        <div style="float: right; display: inline-block;">
+          <el-button type="success" size="mini" icon="el-icon-document-checked" @click="saveQuestion">保存问卷</el-button>
+        </div>
       </div>
-    </el-row>
-    <el-row v-for="(content,cindex) in QuestionForm.content" :key="cindex">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>{{ content.title }}</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="sectionVisible = true, contentIndex=cindex">添加</el-button>
-        </div>
-        <div class="text item">
-          <el-tabs tab-position="left" @tab-click="handleClick($event, cindex)" style="min-height: 200px;">
-            <el-tab-pane v-for="(section, sindex) in content.section_list" :key="sindex">
-              <span slot="label" style="z-index: 5000;">{{ section.title }} <i class="el-icon-edit" v-show="String(sindex) + String(cindex) === activeName"
-                  @click="editSection(section, cindex, sindex)"></i> </span>
-              <div v-for="(item, iindex) in section.item_list" :key="iindex" class="item-box">
-                <p>{{ iindex + 1 }}，({{ item.title }})，{{ item.content }}</p>
-                <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
-              </div>
-              <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex" />
-            </el-tab-pane>
-          </el-tabs>
-        </div>
-      </el-card>
+
+      <el-divider></el-divider>
+      <el-row>
+        <el-form style="width: 510px;" label-position="left" label-width="110px" :model="QuestionForm" :rules="questionFormRules" ref="QuestionForm">
+          <el-form-item label="问卷标题" required prop="title">
+            <el-input v-model="QuestionForm.title"></el-input>
+          </el-form-item>
+          <el-form-item label="调研用户" required prop="users">
+            <el-select v-model="QuestionForm.users" placeholder="请选择人员" multiple style="width: 100%">
+              <el-option v-for="item in surveyUsers" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="问卷调研时间" required prop="surveyTime">
+            <el-date-picker v-model="QuestionForm.surveyTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至"
+              start-placeholder="开始日期" end-placeholder="结束日期" />
+          </el-form-item>
+        </el-form>
+      </el-row>
     </el-row>
 
     <el-row>
-      <AddContent @addContent="addContent"></AddContent>
-      <el-button type="primary" @click="saveQuestion">保存问卷</el-button>
+      <div class="question-header">
+        <i class="el-icon-menu"></i>
+        <span class="question-title">问卷调研内容</span>
+        <AddContent @addContent="addContent"></AddContent>
+      </div>
+
+      <el-divider></el-divider>
+      <el-row v-for="(content,cindex) in QuestionForm.content" :key="cindex">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>{{ content.title }}</span>
+            <AddSection @setContentIndex="contentIndex=cindex" @addSection="addSection"></AddSection>
+          </div>
+          <div class="text item">
+            <el-tabs tab-position="left" @tab-click="handleClick($event, cindex)" style="min-height: 200px;">
+              <el-tab-pane v-for="(section, sindex) in content.section_list" :key="sindex">
+                <span slot="label" style="z-index: 5000;">
+                  {{ section.title }}
+                  <!--              <i class="el-icon-edit" v-show="String(sindex) + String(cindex) === activeName"
+                    @click="editSection(section, cindex, sindex)"></i> -->
+                </span>
+                <div v-for="(item, iindex) in section.item_list" :key="iindex" class="item-box">
+                  <p>{{ iindex + 1 }}，({{ item.title }})，{{ item.content }}</p>
+                  <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
+                </div>
+                <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex" />
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+        </el-card>
+      </el-row>
+    </el-row>
+
+<!--    <el-row>
       <el-button type="success" @click="$router.push({path: '/QuestionManage/list'})">返回</el-button>
-    </el-row>
-
-
-    <el-dialog width="25%" title="添加分部内容" :visible.sync="sectionVisible">
-      <el-form ref="sectionForm" :model="sectionForm" :rules="sectionRules">
-        <el-form-item label="分部内容标题" :label-width="formLabelWidth" prop="title">
-          <el-input v-model="sectionForm.title" />
-        </el-form-item>
-        <el-form-item label="分部分数" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="sectionForm.score" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="sectionVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addSection('sectionForm')">确 定</el-button>
-      </div>
-    </el-dialog>
-
+    </el-row> -->
     <el-dialog width="40%" title="添加分项内容" :visible.sync="itemVisible">
       <el-form ref="itemForm" :model="itemForm" :rules="itemRules">
         <el-form-item label="分项内容标题" :label-width="formLabelWidth" prop="title">
@@ -96,53 +103,50 @@
 <script>
   import * as api from '@/api/w'
   import AddContent from './common/addContent'
+  import AddSection from './common/addSection'
 
   export default {
     components: {
-      AddContent
+      AddContent,
+      AddSection
     },
     data() {
       return {
-        surveyTime: [
-          new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date()
-            .getMinutes()),
-          new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7, new Date().getHours(),
-            new Date().getMinutes())
-        ],
+        surveyUsers: [],
         contentIndex: '',
         sectionIndex: '',
         formLabelWidth: '110px',
         questionTitle: {},
         QuestionForm: {
           title: '',
-          content: []
+          users: [],
+          content: [],
+          surveyTime: [
+            new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date()
+              .getMinutes()),
+            new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7, new Date().getHours(),
+              new Date().getMinutes())
+          ],
         },
-        questionTitleRules: {
+        questionFormRules: {
           title: [{
             required: true,
             message: '请输入问卷标题',
             trigger: 'blur'
-          }]
+          }],
+          users: [{
+            required: true,
+            message: '请选择调研人员',
+            trigger: 'change'
+          }],
+          surveyTime: [{
+            required: true,
+            message: '请选择调研时间',
+            trigger: 'change'
+          }],
+
         },
 
-        sectionVisible: false,
-        sectionForm: {
-          title: '',
-          score: '',
-          item_list: []
-        },
-        sectionRules: {
-          title: [{
-            required: true,
-            message: '请输入标题',
-            trigger: 'blur'
-          }],
-          score: [{
-            required: true,
-            message: '请输入分数',
-            trigger: 'blur'
-          }]
-        },
         itemVisible: false,
         itemForm: {
           title: '',
@@ -181,24 +185,31 @@
         if (id) {
           api.getDetailQuestionData(id).then(response => {
             if (response.data.length !== 0) {
-              console.log(response.data.surveyTime)
-              this.surveyTime = [new Date(response.data.start_at), new Date(response.data.end_at)]
               this.QuestionForm = response.data
+              this.QuestionForm.users = response.data.users ? response.data.users.split(',').map((item) => {
+                return parseInt(item)
+              }) : []
+              this.QuestionForm.surveyTime = [new Date(response.data.start_at), new Date(response.data.end_at)]
             }
           })
         }
+        api.getUserData().then(response => {
+          this.surveyUsers = response.data
+        })
       },
       saveQuestion() {
-        this.$refs.titleForm.validate((valid) => {
+        this.$refs.QuestionForm.validate((valid) => {
           if (valid) {
             const data = this.QuestionForm
-            data.surveyTime = this.surveyTime
-            console.log(data.surveyTime)
+            console.log(data.users.length)
+            data.survey_number = data.users.length
+            data.users = data.users.join()
             api.addQuestion(data).then(response => {
               this.$router.push('/questionManage/list')
               this.$message.success('保存成功')
             })
           } else {
+            this.$message.error('问卷信息不能为空')
             return false
           }
         })
@@ -206,26 +217,12 @@
       handleClick(tab, index) {
         this.activeName = tab._data.index + index
       },
-      addContent(data){
+      addContent(data) {
         this.QuestionForm.content.push(data)
       },
 
-      addSection(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            let sectionList = this.QuestionForm.content[this.contentIndex].section_list
-
-            // this.QuestionForm.content[this.contentIndex].section_list.push(this.sectionForm)
-            // this.sectionVisible = false
-            // this.sectionForm = {
-            //   title: '',
-            //   score: '',
-            //   item_list: []
-            // }
-          } else {
-            return false
-          }
-        })
+      addSection(data) {
+        this.QuestionForm.content[this.contentIndex].section_list.push(data)
       },
       editSection(section, cindex, sindex) {
         this.contentIndex = cindex
@@ -288,5 +285,30 @@
     display: inline-block;
     text-align: left;
     padding: 0px !important
+  }
+
+  .el-divider--horizontal {
+    display: block;
+    height: 1px;
+    width: 100%;
+    margin: 0px 0px 20px 0px !important
+  }
+
+  .question-header {
+    height: 50px;
+    line-height: 50px;
+  }
+
+  .question-header .el-icon-menu {
+    color: #0fa0e6;
+    font-size: 20px;
+  }
+
+  .question-header .question-title {
+    margin-left: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #4a5767;
+    line-height: 18px;
   }
 </style>

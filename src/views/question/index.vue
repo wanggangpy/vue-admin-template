@@ -54,32 +54,13 @@
         </el-table-column>
         <el-table-column align="center" prop="created_at" label="操作" width="250">
           <template slot-scope="scope">
-            <el-button v-if="!scope.row.status" type="success" icon="el-icon-video-play" size="mini" @click="startVisible = true, startQuestionId = scope.row.id">开始</el-button>
+            <el-button v-if="!scope.row.status" type="success" icon="el-icon-video-play" size="mini" @click="startQuestion(scope.row.id)">开始</el-button>
             <el-button v-if="!scope.row.status" type="info" icon="el-icon-edit" size="mini" @click="$router.push({path: '/questionManage/add', query: {id: scope.row.id}})">编辑</el-button>
             <el-button v-if="scope.row.status" type="warning" icon="el-icon-video-pause" size="mini" @click="stopQuestion(scope.row.id)">停止</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-
-    <el-dialog
-      title="开启问卷"
-      :visible.sync="startVisible"
-      width="30%"
-      >
-      <el-form ref="startForm" :model="startForm" label-position="left" :rules="startRules" :show-message="false">
-      <el-form-item label="调研人员" prop="users">
-        <el-select v-model="startForm.users" placeholder="请选择人员" multiple style="width: 70%">
-          <el-option v-for="item in surveyUsers" :key="item.id" :label="item.name" :value="item.id"></el-option>
-        </el-select>
-      </el-form-item>
-      </el-form>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="startVisible = false">取 消</el-button>
-        <el-button type="primary" @click="startQuestion">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -101,13 +82,7 @@ export default {
     return {
       listLoading: false,
       tableData: [],
-      startVisible: false,
       surveyUsers: [],
-      startForm: {},
-      startRules: {
-        users: [
-          { required: true, message: '请选择调研人员', trigger: 'blur' }
-        ] },
       startQuestionId: ''
     }
   },
@@ -119,27 +94,14 @@ export default {
       this.listLoading = true
       api.getQuestionData().then(response => {
         this.tableData = response.data
-      })
-      api.getUserData().then(response => {
-        this.surveyUsers = response.data
         this.listLoading = false
       })
     },
 
-    startQuestion() {
-      this.$refs.startForm.validate((valid) => {
-        if (valid) {
-          api.updateQuestion(this.startQuestionId, { 'status': true, 'survey_number': this.startForm.users.length, 'users': this.startForm.users.join() }).then(response => {
-            this.startVisible = false
-            this.tableData.forEach((item, index) => {
-              if (item.id === this.startQuestionId) {
-                this.tableData[index].status = true
-                this.tableData[index].survey_number = this.startForm.users.length
-              }
-            })
-          })
-        } else {
-          return false
+    startQuestion(startQuestionId) {
+      api.updateQuestion(startQuestionId, { 'status': true }).then(response => {
+        if (response.code === 200){
+          this.fetchData()
         }
       })
     },

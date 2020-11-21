@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span class="card-title">调研列表</span>
-        <el-button v-show="delResultList.length" type="danger" size="mini" style="float: right;">删除</el-button>
+        <el-button v-show="delResultList.length" type="danger" size="mini" style="float: right;" @click="delQuestionResult()">删除</el-button>
       </div>
       <el-table
         v-loading="listLoading"
@@ -53,7 +53,23 @@ export default {
     },
 
     handleSelectionChange(val) {
-      this.delResultList = val
+      this.delResultList = val.map(item => {
+        return item.id
+      })
+    },
+
+    delQuestionResult(){
+      let delData = {
+        list_id: JSON.stringify(this.delResultList)
+      }
+      api.delQuestionResult(delData).then(response => {
+        if (response.code === 200){
+          this.fetchData()
+          this.$message.success('删除成功！')
+        }else{
+          this.$message.error('删除失败, 请重试！')
+        }
+      })
     }
 
   }

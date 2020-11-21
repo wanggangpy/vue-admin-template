@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span class="card-title">用户列表</span>
-        <el-button v-show="delUserList.length" type="danger" size="mini" style="float: right;">删除</el-button>
+        <el-button v-show="delUserList.length" type="danger" size="mini" style="float: right;" @click="delUsers()">删除</el-button>
         <el-button v-show="!delUserList.length" size="mini" type="primary" style="float: right;" @click.native="uploadDialogVisible = true">导入用户</el-button>
       </div>
       <el-table
@@ -106,7 +106,23 @@ export default {
     },
 
     handleSelectionChange(val) {
-      this.delUserList = val
+      this.delUserList = val.map(item => {
+        return item.id
+      })
+    },
+
+    delUsers(){
+      let delData = {
+        list_id: JSON.stringify(this.delUserList)
+      }
+      api.delUser(delData).then(response => {
+        if (response.code) {
+          this.fetchData()
+          this.$message.success('删除成功！')
+        }else{
+          this.$message.error('删除失败，请重试 ~')
+        }
+      })
     }
 
   }

@@ -58,6 +58,14 @@ export function getQuestionResult() {
   })
 }
 
+export function delQuestionResult(data){
+  return request({
+    url: '/questionResult/multipleDelete',
+    method: 'delete',
+    data
+  })
+}
+
 export function addQuestion(data, action='add') {
   return request({
     url: `/question?a=${action}`,
@@ -102,5 +110,13 @@ export function logout() {
   return request({
     url: '/user/logout',
     method: 'post'
+  })
+}
+
+export function delUser(data){
+  return request({
+    url: '/user/multipleDelete',
+    method: 'delete',
+    data
   })
 }

@@ -8,10 +8,11 @@ export function importUser(data) {
   })
 }
 
-export function getUserData() {
+export function getUserData(page) {
   return request({
     url: '/user',
-    method: 'get'
+    method: 'get',
+    params: {page}
   })
 }
 
@@ -22,11 +23,18 @@ export function getUserInfo(token) {
   })
 }
 
-
 export function getQuestionData() {
   return request({
     url: '/question',
     method: 'get'
+  })
+}
+
+export function delQuestionData(data) {
+  return request({
+    url: '/question',
+    method: 'delete',
+    data
   })
 }
 

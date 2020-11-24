@@ -1,7 +1,7 @@
 <template>
   <span>
-    <el-button style="float: right; padding: 3px 0" type="text" @click="open()">添加分部内容</el-button>
-    <el-dialog width="40%" title="添加分部内容" :visible.sync="sectionVisible">
+    <!-- <el-button style="float: right; padding: 3px 0" type="text" @click="open()">添加分部内容</el-button> -->
+    <el-dialog width="40%" :title="dialogTitle" :visible.sync="sectionVisible" @close="closeDialog()">
       <el-form ref="sectionForm" :model="sectionForm" :rules="sectionRules">
         <el-form-item required>
           <el-col :span="16">
@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item v-for="(opinion, index) in sectionForm.opinion_list" :key="index" required>
           <el-col :span="6">
-            <el-form-item label="评估内容评语" :prop="`opinion_list[${index}].title`" :rules="{ required: true, message: '请输入评语内容', trigger: 'blur' }">
+            <el-form-item :label="dialogTitle" :prop="`opinion_list[${index}].title`" :rules="{ required: true, message: '请输入评语内容', trigger: 'blur' }">
               <el-input v-model="opinion.title" />
             </el-form-item>
           </el-col>
@@ -62,6 +62,7 @@
     name: "addSection",
     data() {
       return {
+        dialogTitle: '添加分部内容',
         sectionVisible: false,
         sectionForm: {
           title: '',
@@ -91,13 +92,41 @@
     },
     methods: {
       open() {
+        this.dialogTitle = '添加分部内容'
         this.sectionVisible = true
-        this.$emit('setContentIndex')
       },
+      edit(data) {
+        if (this.$refs['sectionForm']){
+          this.$refs['sectionForm'].resetFields();
+        }
+        this.dialogTitle = '编辑分部内容'
+        this.sectionVisible = true
+        let editData = JSON.parse(JSON.stringify(data));
+        this.sectionForm = editData
+      },
+      closeDialog(){
+        this.sectionForm = {
+          title: '',
+          score: '',
+          item_list: [],
+          opinion_list: [{
+            title: '',
+            grade1: '',
+            grade2: '',
+            grade3: '',
+            grade4: ''
+          }]
+        }
+      },
+
       addSection(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$emit('addSection', this.sectionForm)
+            if (this.dialogTitle === '添加分部内容'){
+              this.$emit('addSection', this.sectionForm, 1)
+            }else{
+              this.$emit('addSection', this.sectionForm, 0)
+            }
             this.sectionVisible = false
             this.sectionForm = {
               title: '',
@@ -111,20 +140,21 @@
                 grade4: ''
               }]
             }
+
           } else {
             return false
           }
         })
       },
-      
+
       addOpinion(){
         this.sectionForm.opinion_list.push({ title: '', grade1: '', grade2: '', grade3: '', grade4: ''})
       },
-      
+
       delOpinion(item){
-        var index = this.contentForm.opinion_list.indexOf(item)
+        var index = this.sectionForm.opinion_list.indexOf(item)
         if (index !== -1) {
-          this.contentForm.opinion_list.splice(index, 1)
+          this.sectionForm.opinion_list.splice(index, 1)
         }
       }
     }

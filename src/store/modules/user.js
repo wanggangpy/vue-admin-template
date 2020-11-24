@@ -59,7 +59,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getUserInfo(state.token).then(response => {
         commit('SET_NAME', { 'k': response.data.id, 'v': response.data.username })
-        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+        // commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
         commit('SET_ROLES', response.data.roles)
         resolve(response.data)
       }).catch(error => {

@@ -181,33 +181,33 @@
             }
           }
 
-          if (row.content === '实施过程') {
-            if ([6].includes(rowIndex)) {
-              return {
-                rowspan: 7,
-                colspan: 1
-              }
-            } else {
-              return {
-                rowspan: 0,
-                colspan: 0
-              }
-            }
-          }
+          // if (row.content === '实施过程') {
+          //   if ([6].includes(rowIndex)) {
+          //     return {
+          //       rowspan: 7,
+          //       colspan: 1
+          //     }
+          //   } else {
+          //     return {
+          //       rowspan: 0,
+          //       colspan: 0
+          //     }
+          //   }
+          // }
 
-          if (row.content === '防控效果') {
-            if ([13].includes(rowIndex)) {
-              return {
-                rowspan: 2,
-                colspan: 1
-              }
-            } else {
-              return {
-                rowspan: 0,
-                colspan: 0
-              }
-            }
-          }
+          // if (row.content === '防控效果') {
+          //   if ([13].includes(rowIndex)) {
+          //     return {
+          //       rowspan: 2,
+          //       colspan: 1
+          //     }
+          //   } else {
+          //     return {
+          //       rowspan: 0,
+          //       colspan: 0
+          //     }
+          //   }
+          // }
 
 
 
@@ -219,13 +219,13 @@
           //   }
           // }
           //
-          // if (row.content === '整体评价') {
-          //   if ([40].includes(rowIndex)) {
-          //     return {rowspan: 5, colspan: 1}
-          //   } else {
-          //     return {rowspan: 0, colspan: 0}
-          //   }
-          // }
+          if (row.content === '整体评价') {
+            if ([6].includes(rowIndex)) {
+              return {rowspan: 2, colspan: 1}
+            } else {
+              return {rowspan: 0, colspan: 0}
+            }
+          }
 
         }
 
@@ -259,52 +259,52 @@
             }
           }
 
-          if (row.content === '实施过程') {
-            if ([6].includes(rowIndex)) {
-              return {
-                rowspan: 7,
-                colspan: 1
-              }
-            } else {
-              return {
-                rowspan: 0,
-                colspan: 0
-              }
-            }
-          }
+          // if (row.content === '实施过程') {
+          //   if ([6].includes(rowIndex)) {
+          //     return {
+          //       rowspan: 7,
+          //       colspan: 1
+          //     }
+          //   } else {
+          //     return {
+          //       rowspan: 0,
+          //       colspan: 0
+          //     }
+          //   }
+          // }
 
-          if (row.content === '防控效果') {
-            if ([13].includes(rowIndex)) {
-              return {
-                rowspan: 2,
-                colspan: 1
-              }
-            } else {
-              return {
-                rowspan: 0,
-                colspan: 0
-              }
-            }
-          }
+          // if (row.content === '防控效果') {
+          //   if ([13].includes(rowIndex)) {
+          //     return {
+          //       rowspan: 2,
+          //       colspan: 1
+          //     }
+          //   } else {
+          //     return {
+          //       rowspan: 0,
+          //       colspan: 0
+          //     }
+          //   }
+          // }
 
-          if (row.content === '特别评价') {
-            if ([36].includes(rowIndex)) {
-              return {
-                rowspan: 4,
-                colspan: 1
-              }
-            } else {
-              return {
-                rowspan: 0,
-                colspan: 0
-              }
-            }
-          }
+          // if (row.content === '特别评价') {
+          //   if ([36].includes(rowIndex)) {
+          //     return {
+          //       rowspan: 4,
+          //       colspan: 1
+          //     }
+          //   } else {
+          //     return {
+          //       rowspan: 0,
+          //       colspan: 0
+          //     }
+          //   }
+          // }
 
           if (row.content === '整体评价') {
-            if ([40].includes(rowIndex)) {
+            if ([6].includes(rowIndex)) {
               return {
-                rowspan: 5,
+                rowspan: 2,
                 colspan: 1
               }
             } else {

@@ -92,7 +92,6 @@ export default {
   .content-box {
     margin-top: 50px;
     padding-bottom: 40px;
-    border-bottom: 1px dashed #c2cbd4;
   }
 
   .section-box {

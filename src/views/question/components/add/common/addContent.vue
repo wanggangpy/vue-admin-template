@@ -1,7 +1,7 @@
 <template>
   <div class="add-content">
-    <el-button type="primary" @click="contentVisible = true" icon="el-icon-circle-plus" size="mini">添加评估内容</el-button>
-    <el-dialog width="35%" title="添加评估内容" :visible.sync="contentVisible">
+    <el-button type="primary" @click="open()" icon="el-icon-circle-plus" size="mini">添加评估内容</el-button>
+    <el-dialog width="35%" :title="dialogTitle" :visible.sync="contentVisible">
       <el-form class="content-form" ref="contentForm" label-position="top" :model="contentForm" :rules="contentRules">
         <el-form-item required>
           <el-col :span="16">
@@ -65,6 +65,7 @@
     name: 'AddContent',
     data(){
       return {
+        dialogTitle: '添加评估内容',
         contentVisible: false,
         contentForm: {
           title: '',
@@ -97,11 +98,34 @@
     },
 
     methods: {
+      open(){
+        this.contentForm = {
+          title: '',
+          weights: '',
+          section_list: [],
+          opinion_list: [
+            { title: '', grade1: '', grade2: '', grade3: '', grade4: ''}
+          ]
+        },
+        this.dialogTitle = "添加评估内容"
+        this.contentVisible = true
+      },
+      edit(data){
+        if (this.$refs['contentForm']){
+          this.$refs['contentForm'].resetFields();
+        }
+        this.dialogTitle = "编辑评估内容"
+        this.contentForm = JSON.parse(JSON.stringify(data))
+        this.contentVisible = true
+      },
       addContent(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log(this.contentForm)
-            this.$emit('addContent', this.contentForm)
+            if (this.dialogTitle === '添加评估内容'){
+              this.$emit('addContent', this.contentForm, 1)
+            }else{
+              this.$emit('addContent', this.contentForm, 0)
+            }
             this.contentVisible = false
             this.contentForm = {
               title: '',

@@ -5,13 +5,8 @@
         <span class="card-title">调研列表</span>
         <el-button v-show="delResultList.length" type="danger" size="mini" style="float: right;" @click="delQuestionResult()">删除</el-button>
       </div>
-      <el-table
-        v-loading="listLoading"
-        :data="tableData"
-        element-loading-text="Loading"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-      >
+      <el-table v-loading="listLoading" :data="tableData" element-loading-text="Loading" style="width: 100%"
+        @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column prop="title" label="标题" />
         <el-table-column prop="user" label="调研人员" />
@@ -28,62 +23,71 @@
 </template>
 
 <script>
-import * as api from '@/api/w'
+  import * as api from '@/api/w'
 
-export default {
-  data() {
-    return {
-      tableData: [],
-      uploadDialogVisible: false,
-      listLoading: false,
-      dialogWidth: '30%',
-      delResultList: []
-    }
-  },
-  created() {
-    this.fetchData()
-  },
-  methods: {
-    fetchData() {
-      this.listLoading = true
-      api.getQuestionResult().then(response => {
-        this.tableData = response.data
-        this.listLoading = false
-      })
-    },
-
-    handleSelectionChange(val) {
-      this.delResultList = val.map(item => {
-        return item.id
-      })
-    },
-
-    delQuestionResult(){
-      let delData = {
-        list_id: JSON.stringify(this.delResultList)
+  export default {
+    data() {
+      return {
+        tableData: [],
+        uploadDialogVisible: false,
+        listLoading: false,
+        dialogWidth: '30%',
+        delResultList: []
       }
-      api.delQuestionResult(delData).then(response => {
-        if (response.code === 200){
-          this.fetchData()
-          this.$message.success('删除成功！')
-        }else{
-          this.$message.error('删除失败, 请重试！')
-        }
-      })
-    }
+    },
+    created() {
+      this.fetchData()
+    },
+    methods: {
+      fetchData() {
+        this.listLoading = true
+        api.getQuestionResult().then(response => {
+          this.tableData = response.data
+          this.listLoading = false
+        })
+      },
 
+      handleSelectionChange(val) {
+        this.delResultList = val.map(item => {
+          return item.id
+        })
+      },
+
+      delQuestionResult() {
+        let delData = {
+          list_id: JSON.stringify(this.delResultList)
+        }
+        this.$confirm('此操作将删除选择调研结果, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          api.delQuestionResult(delData).then(response => {
+            if (response.code === 200) {
+              this.fetchData()
+              this.$message.success('删除成功！')
+            } else {
+              this.$message.error('删除失败, 请重试！')
+            }
+          })
+        }).catch(() => {
+        });
+      }
+
+    }
   }
-}
 </script>
 
-  <style scoped>
-  .line{
+<style scoped>
+  .line {
     text-align: center;
   }
+
   .card-title {
     font-weight: 500;
     font-size: 15px;
   }
+
   .upload-demo {
     text-align: center;
   }

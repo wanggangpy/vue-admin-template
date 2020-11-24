@@ -11,7 +11,8 @@
 
       <el-divider></el-divider>
       <el-row>
-        <el-form style="width: 510px;" label-position="left" label-width="110px" :model="QuestionForm" :rules="questionFormRules" ref="QuestionForm">
+        <el-form style="width: 510px;" label-position="left" label-width="110px" :model="QuestionForm" :rules="questionFormRules"
+          ref="QuestionForm">
           <el-form-item label="问卷标题" required prop="title">
             <el-input v-model="QuestionForm.title"></el-input>
           </el-form-item>
@@ -21,8 +22,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="问卷调研时间" required prop="surveyTime">
-            <el-date-picker v-model="QuestionForm.surveyTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至"
-              start-placeholder="开始日期" end-placeholder="结束日期" />
+            <el-date-picker v-model="QuestionForm.surveyTime" type="datetimerange" value-format="yyyy-MM-dd HH:mm:ss"
+              range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" />
           </el-form-item>
         </el-form>
       </el-row>
@@ -32,27 +33,45 @@
       <div class="question-header">
         <i class="el-icon-menu"></i>
         <span class="question-title">问卷调研内容</span>
-        <AddContent @addContent="addContent"></AddContent>
+        <AddContent @addContent="addContent" ref="addContentRef"></AddContent>
       </div>
-
       <el-divider></el-divider>
       <el-row v-for="(content,cindex) in QuestionForm.content" :key="cindex">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>{{ content.title }}</span>
-            <AddSection @setContentIndex="contentIndex=cindex" @addSection="addSection"></AddSection>
+            <el-dropdown trigger="click" @command="handleContentCommand($event, content, cindex)" style="display: inline-block;float: right;">
+              <span class="el-dropdown-link">
+                操作<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="add" icon="el-icon-circle-plus">添加分部内容</el-dropdown-item>
+                <el-dropdown-item command="edit" icon="el-icon-edit">编辑</el-dropdown-item>
+                <el-dropdown-item command="delete" icon="el-icon-delete">删除</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <AddSection @addSection="addSection" ref="addSectionRef" />
           </div>
           <div class="text item">
             <el-tabs tab-position="left" @tab-click="handleClick($event, cindex)" style="min-height: 200px;">
               <el-tab-pane v-for="(section, sindex) in content.section_list" :key="sindex">
                 <span slot="label" style="z-index: 5000;">
-                  {{ section.title }}
-                  <!--              <i class="el-icon-edit" v-show="String(sindex) + String(cindex) === activeName"
-                    @click="editSection(section, cindex, sindex)"></i> -->
+                  <!--                  <i class="el-icon-edit" v-show="String(sindex) + String(cindex) === activeName" @click="editSection(section, cindex, sindex)"></i>
+                  {{ section.title }} ({{section.score}}分) -->
+                  <span class="el-dropdown-link">
+                    {{section.title}} ({{section.score}}分)
+                  </span>
+                  <el-dropdown trigger="click" @command="handleSectionCommand($event, section, cindex, sindex)">
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item command="edit" icon="el-icon-edit">编辑</el-dropdown-item>
+                      <el-dropdown-item command="delete" icon="el-icon-delete">删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
                 </span>
                 <div v-for="(item, iindex) in section.item_list" :key="iindex" class="item-box">
                   <p>{{ iindex + 1 }}，({{ item.title }})，{{ item.content }}</p>
-                  <p v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
+                  <p class="item-box-choose" v-for="(choose, index) in item.chooses" :key="index">{{ choose.title }}（{{ choose.choose_score }}分）</p>
                 </div>
                 <el-button class="add-item-btn" icon="el-icon-plus" circle @click="itemVisible = true, sectionIndex=sindex, contentIndex=cindex" />
               </el-tab-pane>
@@ -62,7 +81,7 @@
       </el-row>
     </el-row>
 
-<!--    <el-row>
+    <!--    <el-row>
       <el-button type="success" @click="$router.push({path: '/QuestionManage/list'})">返回</el-button>
     </el-row> -->
     <el-dialog width="40%" title="添加分项内容" :visible.sync="itemVisible">
@@ -122,7 +141,8 @@
           users: [],
           content: [],
           surveyTime: [
-            new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date()
+            new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(),
+              new Date()
               .getMinutes()),
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 7, new Date().getHours(),
               new Date().getMinutes())
@@ -146,7 +166,6 @@
           }],
 
         },
-
         itemVisible: false,
         itemForm: {
           title: '',
@@ -189,7 +208,7 @@
               this.QuestionForm.users = response.data.users ? response.data.users.split(',').map((item) => {
                 return parseInt(item)
               }) : []
-              this.QuestionForm.surveyTime = [new Date(response.data.start_at), new Date(response.data.end_at)]
+              this.$set(this.QuestionForm, "surveyTime",  [new Date(response.data.start_at), new Date(response.data.end_at)])
             }
           })
         }
@@ -217,18 +236,55 @@
       handleClick(tab, index) {
         this.activeName = tab._data.index + index
       },
-      addContent(data) {
-        this.QuestionForm.content.push(data)
+      addContent(data, type) {
+        if (type) {
+          this.QuestionForm.content.push(data)
+        } else {
+          this.QuestionForm.content.splice(this.contentIndex, 1, data)
+        }
       },
-
-      addSection(data) {
-        this.QuestionForm.content[this.contentIndex].section_list.push(data)
+      handleContentCommand(command, content, cindex) {
+        if (command === 'add') {
+          this.contentIndex = cindex
+          this.$refs.addSectionRef[0].open()
+        }else if (command === 'edit'){
+          this.$refs.addContentRef.edit(content)
+        } else if (command === 'delete') {
+          this.$confirm('此操作将删除该评估内容, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.QuestionForm.content.splice(cindex, 1)
+          }).catch(() => {
+          });
+        }
+      },
+      addSection(data, type) {
+        if (type) {
+          this.QuestionForm.content[this.contentIndex].section_list.push(data)
+        } else {
+          this.QuestionForm.content[this.contentIndex].section_list.splice(this.sectionIndex, 1, data)
+        }
       },
       editSection(section, cindex, sindex) {
         this.contentIndex = cindex
         this.sectionIndex = sindex
-        this.sectionVisible = true
-        this.sectionForm = section
+        this.$refs.addSectionRef[0].edit(section)
+      },
+      handleSectionCommand(command, section, cindex, sindex) {
+        if (command === 'edit') {
+          this.editSection(section, cindex, sindex)
+        } else if (command === 'delete') {
+          this.$confirm('此操作将删除该分部内容, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.QuestionForm.content[cindex].section_list.splice(sindex, 1)
+          }).catch(() => {
+          });
+        }
       },
       addItem(formName) {
         this.$refs[formName].validate((valid) => {
@@ -287,6 +343,14 @@
     padding: 0px !important
   }
 
+  .el-dropdown-link {
+    cursor: pointer;
+  }
+
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+
   .el-divider--horizontal {
     display: block;
     height: 1px;
@@ -310,5 +374,10 @@
     font-weight: 700;
     color: #4a5767;
     line-height: 18px;
+  }
+
+  .item-box .item-box-choose {
+    font-size: 14px;
+    margin-left: 25px;
   }
 </style>

@@ -7,7 +7,9 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <i class="el-icon-user-solid"></i>
+          {{ name.v }}
+          <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -15,7 +17,7 @@
             {{ name.v }}
           </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">注销</span>
+            <span style="display:block;">注销账号</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -122,7 +124,7 @@ export default {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 20px;
           font-size: 12px;
         }
       }

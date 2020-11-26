@@ -16,6 +16,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="opinion" label="评估意见" header-align="center" align="center"></el-table-column>
+            <el-table-column prop="compute_weights_score" label="分项总分" header-align="center" align="center" width="100"></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -126,6 +127,13 @@
       fetchData() {
         getUserQuestionResult(this.$route.query.uid, this.$route.query.title).then(response => {
           this.tableData = response.data
+          let tableTotalScore = this.tableData.tableTotalScore
+          this.tableData.data.push({
+              "id": `总计（${tableTotalScore}）`,
+              "content": "",
+              "item": "",
+              "opinion": ''
+            })
         })
       },
 
@@ -181,35 +189,33 @@
             }
           }
 
-          // if (row.content === '实施过程') {
-          //   if ([6].includes(rowIndex)) {
-          //     return {
-          //       rowspan: 7,
-          //       colspan: 1
-          //     }
-          //   } else {
-          //     return {
-          //       rowspan: 0,
-          //       colspan: 0
-          //     }
-          //   }
-          // }
+          if (row.content === '实施过程') {
+            if ([6].includes(rowIndex)) {
+              return {
+                rowspan: 3,
+                colspan: 1
+              }
+            } else {
+              return {
+                rowspan: 0,
+                colspan: 0
+              }
+            }
+          }
 
-          // if (row.content === '防控效果') {
-          //   if ([13].includes(rowIndex)) {
-          //     return {
-          //       rowspan: 2,
-          //       colspan: 1
-          //     }
-          //   } else {
-          //     return {
-          //       rowspan: 0,
-          //       colspan: 0
-          //     }
-          //   }
-          // }
-
-
+          if (row.content === '防控效果') {
+            if ([9].includes(rowIndex)) {
+              return {
+                rowspan: 2,
+                colspan: 1
+              }
+            } else {
+              return {
+                rowspan: 0,
+                colspan: 0
+              }
+            }
+          }
 
           // if (row.content === '特别评价') {
           //   if ([36].includes(rowIndex)) {
@@ -218,10 +224,11 @@
           //     return {rowspan: 0, colspan: 0}
           //   }
           // }
-          //
+
+
           if (row.content === '整体评价') {
-            if ([6].includes(rowIndex)) {
-              return {rowspan: 2, colspan: 1}
+            if ([11].includes(rowIndex)) {
+              return {rowspan: 4, colspan: 1}
             } else {
               return {rowspan: 0, colspan: 0}
             }
@@ -230,7 +237,7 @@
         }
 
 
-        if (column.label === '评估意见') {
+        if (column.label === '评估意见' || column.label === '分项总分') {
           if (row.content === '组织管理') {
             if (rowIndex === 0) {
               return {
@@ -259,33 +266,33 @@
             }
           }
 
-          // if (row.content === '实施过程') {
-          //   if ([6].includes(rowIndex)) {
-          //     return {
-          //       rowspan: 7,
-          //       colspan: 1
-          //     }
-          //   } else {
-          //     return {
-          //       rowspan: 0,
-          //       colspan: 0
-          //     }
-          //   }
-          // }
+          if (row.content === '实施过程') {
+            if ([6].includes(rowIndex)) {
+              return {
+                rowspan: 3,
+                colspan: 1
+              }
+            } else {
+              return {
+                rowspan: 0,
+                colspan: 0
+              }
+            }
+          }
 
-          // if (row.content === '防控效果') {
-          //   if ([13].includes(rowIndex)) {
-          //     return {
-          //       rowspan: 2,
-          //       colspan: 1
-          //     }
-          //   } else {
-          //     return {
-          //       rowspan: 0,
-          //       colspan: 0
-          //     }
-          //   }
-          // }
+          if (row.content === '防控效果') {
+            if ([9].includes(rowIndex)) {
+              return {
+                rowspan: 2,
+                colspan: 1
+              }
+            } else {
+              return {
+                rowspan: 0,
+                colspan: 0
+              }
+            }
+          }
 
           // if (row.content === '特别评价') {
           //   if ([36].includes(rowIndex)) {
@@ -302,9 +309,9 @@
           // }
 
           if (row.content === '整体评价') {
-            if ([6].includes(rowIndex)) {
+            if ([11].includes(rowIndex)) {
               return {
-                rowspan: 2,
+                rowspan: 4,
                 colspan: 1
               }
             } else {

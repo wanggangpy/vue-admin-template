@@ -1,7 +1,7 @@
 <template>
   <div class="add-content">
     <el-button type="primary" @click="open()" icon="el-icon-circle-plus" size="mini">添加评估内容</el-button>
-    <el-dialog width="35%" :title="dialogTitle" :visible.sync="contentVisible">
+    <el-dialog width="35%" :close-on-click-modal="false" :title="dialogTitle" :visible.sync="contentVisible">
       <el-form class="content-form" ref="contentForm" label-position="top" :model="contentForm" :rules="contentRules">
         <el-form-item required>
           <el-col :span="16">

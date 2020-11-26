@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span class="card-title">问卷管理</span>
+        <span class="card-title">测评管理</span>
         <el-button style="float: right;" size="small" type="primary" @click="$router.push('/questionManage/add')">添加</el-button>
       </div>
       <el-table v-loading="listLoading" :data="tableData" element-loading-text="Loading" border fit
@@ -147,13 +147,9 @@
         this.dataList[index].status = status ? 0 : 1
       },
 
-      format(percentage) {
-        return percentage === 50 ? '满' : `${percentage}%`
-      },
-
       percentage(row) {
         if (row.survey_number > row.completed_number) {
-          return (row.completed_number / row.survey_number * 100).toFixed(0)
+          return parseInt((row.completed_number / row.survey_number * 100).toFixed(0))
         }
         return 100
       },
@@ -179,10 +175,10 @@
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .el-dropdown-link {
     cursor: pointer;
-    color: #409EFF;
+    color: #409EFF !important
   }
 
   .el-icon-arrow-down {

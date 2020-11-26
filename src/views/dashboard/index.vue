@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span class="card-title">我的问卷</span>
+        <span class="card-title">我的测评</span>
       </div>
       <el-table
         v-loading="listLoading"

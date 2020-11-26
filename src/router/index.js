@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '我的问卷', icon: 'dashboard' }
+      meta: { title: '我的测评', icon: 'dashboard' }
     }]
   },
 
@@ -89,7 +89,7 @@ export const asyncRoutes = [
         path: 'list',
         name: 'questionManage',
         component: () => import('@/views/question/index'),
-        meta: { title: '问卷管理', icon: 'el-icon-s-order' },
+        meta: { title: '测评管理', icon: 'el-icon-s-order' },
       },
       {
         path: 'add',
@@ -109,7 +109,7 @@ export const asyncRoutes = [
         path: 'list',
         name: 'result',
         component: () => import('@/views/result/index'),
-        meta: { title: '调研结果', icon: 'el-icon-s-data'},
+        meta: { title: '测评结果', icon: 'el-icon-s-data'},
       }
     ]
   },

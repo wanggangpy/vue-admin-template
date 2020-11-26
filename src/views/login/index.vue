@@ -17,7 +17,7 @@
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
+          auto-complete="off"
         />
       </el-form-item>
 
@@ -95,7 +95,11 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            if (this.loginForm !== 'admin'){
+              this.$router.push({ path: '/' })
+            }else{
+              this.$router.push({ path: this.redirect || '/' })
+            }
             this.loading = false
           }).catch((error) => {
             this.loading = false

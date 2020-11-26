@@ -1,7 +1,7 @@
 <template>
   <span>
     <!-- <el-button style="float: right; padding: 3px 0" type="text" @click="open()">添加分部内容</el-button> -->
-    <el-dialog width="40%" :title="dialogTitle" :visible.sync="sectionVisible" @close="closeDialog()">
+    <el-dialog width="40%" :title="dialogTitle" :close-on-click-modal="false" :visible.sync="sectionVisible" @close="closeDialog()">
       <el-form ref="sectionForm" :model="sectionForm" :rules="sectionRules">
         <el-form-item required>
           <el-col :span="16">

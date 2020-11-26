@@ -8,11 +8,11 @@ export function importUser(data) {
   })
 }
 
-export function getUserData(page) {
+export function getUserData(page, keyword="") {
   return request({
     url: '/user',
     method: 'get',
-    params: {page}
+    params: {page, keyword}
   })
 }
 
@@ -125,6 +125,14 @@ export function delUser(data){
   return request({
     url: '/user/multipleDelete',
     method: 'delete',
+    data
+  })
+}
+
+export function addUser(data){
+  return request({
+    url: '/user',
+    method: 'post',
     data
   })
 }

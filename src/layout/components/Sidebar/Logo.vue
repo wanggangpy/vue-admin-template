@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '问卷管理系统',
+      title: '松材线虫防控绩效评估',
       logo: require('../../../assets/logo.png')
     }
   }

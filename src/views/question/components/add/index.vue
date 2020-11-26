@@ -213,14 +213,13 @@
           })
         }
         api.getUserData().then(response => {
-          this.surveyUsers = response.data
+          this.surveyUsers = response.data.data
         })
       },
       saveQuestion() {
         this.$refs.QuestionForm.validate((valid) => {
           if (valid) {
             const data = this.QuestionForm
-            console.log(data.users.length)
             data.survey_number = data.users.length
             data.users = data.users.join()
             api.addQuestion(data).then(response => {

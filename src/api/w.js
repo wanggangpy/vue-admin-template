@@ -66,6 +66,14 @@ export function getQuestionResult() {
   })
 }
 
+export function updateQuestionResult(id, data) {
+  return request({
+    url: `/questionResult/${id}`,
+    method: 'put',
+    data
+  })
+}
+
 export function delQuestionResult(data){
   return request({
     url: '/questionResult/multipleDelete',

@@ -56,6 +56,17 @@ export const constantRoutes = [
   },
 
   {
+    path: '/statistics',
+    component: Layout,
+    redirect: '/statistics',
+    children: [{
+      path: '/',
+      name: 'statistics',
+      component: () => import('@/views/dashboard/statistics'),
+    }]
+  },
+
+  {
     path: '/question',
     component: Layout,
     hidden: true,
@@ -103,7 +114,7 @@ export const asyncRoutes = [
     {
     path: '/result',
     component: Layout,
-    meta: { roles: ['admin'] },
+    meta: { roles: ['admin', 'expert'] },
     children: [
       {
         path: 'list',

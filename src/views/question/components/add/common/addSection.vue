@@ -5,7 +5,7 @@
       <el-form ref="sectionForm" :model="sectionForm" :rules="sectionRules">
         <el-form-item required>
           <el-col :span="16">
-            <el-form-item label="评估内容标题" prop="title">
+            <el-form-item label="分部内容标题" prop="title">
               <el-input v-model="sectionForm.title" />
             </el-form-item>
           </el-col>
@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item v-for="(opinion, index) in sectionForm.opinion_list" :key="index" required>
           <el-col :span="6">
-            <el-form-item :label="dialogTitle" :prop="`opinion_list[${index}].title`" :rules="{ required: true, message: '请输入评语内容', trigger: 'blur' }">
+            <el-form-item label="分部内容评语" :prop="`opinion_list[${index}].title`" :rules="{ required: true, message: '请输入评语内容', trigger: 'blur' }">
               <el-input v-model="opinion.title" />
             </el-form-item>
           </el-col>

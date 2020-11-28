@@ -168,11 +168,22 @@
         })
       },
       saveQuestion() {
+
         this.$refs.QuestionForm.validate((valid) => {
           if (valid) {
             const data = this.QuestionForm
             data.survey_number = data.users.length
             data.users = data.users.join()
+            // 特殊情况中间插入大项
+            // const contentF = {
+            //   title: '档案管理',
+            //   weights: 3,
+            //   section_list: [],
+            //   opinion_list: [
+            //     { title: '', grade1: '', grade2: '', grade3: '', grade4: ''}
+            //   ]
+            // }
+            // data.content.splice(2, 0, contentF)
             api.addQuestion(data).then(response => {
               this.$router.push('/questionManage/list')
               this.$message.success('保存成功')
@@ -194,8 +205,8 @@
         }
       },
       handleContentCommand(command, content, cindex) {
+        this.contentIndex = cindex
         if (command === 'add') {
-          this.contentIndex = cindex
           this.$refs.addSectionRef[0].open()
         } else if (command === 'edit') {
           this.$refs.addContentRef.edit(content)

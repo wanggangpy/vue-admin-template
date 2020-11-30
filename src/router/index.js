@@ -60,9 +60,10 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/statistics',
     children: [{
-      path: '/',
+      path: '',
       name: 'statistics',
       component: () => import('@/views/dashboard/statistics'),
+      meta: { title: '秋普数据', icon: 'dashboard' }
     }]
   },
 
